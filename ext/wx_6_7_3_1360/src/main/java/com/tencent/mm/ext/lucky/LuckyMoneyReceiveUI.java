@@ -6,8 +6,11 @@ import android.app.ext.utils.ViewUtils;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import java.util.List;
 
 /**
  * 监听LuckyMoneyReceiveUI这个Activity的生命周期
@@ -44,16 +47,6 @@ public class LuckyMoneyReceiveUI extends ActivityLifecycleHook {
         ViewUtils.performClick(button);
     }
 
-    @Override
-    public void onActivityDestroyed(Activity activity) {
-        super.onActivityDestroyed(activity);
-    }
-
-    @Override
-    public void onActivityPaused(Activity activity) {
-        super.onActivityPaused(activity);
-    }
-
     /**
      * 查找打开的Button
      *
@@ -61,7 +54,8 @@ public class LuckyMoneyReceiveUI extends ActivityLifecycleHook {
      */
     private Button findOpenButton(Activity activity) {
         ViewGroup contentView = (ViewGroup) activity.findViewById(android.R.id.content);
-        Button button = (Button) ViewUtils.findViewByIdName(contentView, "cb1");
+        // 每个版本的button id值不一样, 也没找到一个比较通用的方案,可能都会存在问题
+        Button button = (Button) ViewUtils.findViewByIdName(contentView, "cnu");
         return button;
     }
 }
