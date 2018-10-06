@@ -2,10 +2,10 @@ package com.tencent.mm.ext.lucky;
 
 import android.app.Activity;
 import android.app.ext.ActivityLifecycleHook;
+import android.app.ext.utils.Log;
 import android.app.ext.utils.ViewUtils;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
 

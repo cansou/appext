@@ -83,6 +83,11 @@ public class ViewUtils {
         return view.findViewById(id);
     }
 
+    public static View findViewByIdName(Activity activity, String idName) {
+        int id = getId(activity, idName);
+        return activity.findViewById(id);
+    }
+
     private static int getId(Context context, String idName) {
         Resources res = context.getResources();
         String pkgName = context.getPackageName();

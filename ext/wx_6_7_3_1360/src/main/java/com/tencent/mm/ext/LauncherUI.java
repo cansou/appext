@@ -2,10 +2,10 @@ package com.tencent.mm.ext;
 
 import android.app.Activity;
 import android.app.ext.ActivityLifecycleHook;
-import android.app.ext.utils.Log;
 import android.app.ext.utils.UiUtils;
 import android.os.Bundle;
 
+import com.tencent.mm.ext.msg.ViewChatFooter;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -19,7 +19,7 @@ public class LauncherUI extends ActivityLifecycleHook {
     public static final String ACTIVITY_NAME = "com.tencent.mm.ui.LauncherUI";
 
     @Override
-    public void onActivityCreated(Activity activity, Bundle bundle) {
+    public void onActivityCreated(final Activity activity, Bundle bundle) {
         super.onActivityCreated(activity, bundle);
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
@@ -27,7 +27,16 @@ public class LauncherUI extends ActivityLifecycleHook {
                 ex.printStackTrace();
             }
         });
-//        ViewChatFooter.setLauncherUI(activity);
+        UiUtils.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ViewChatFooter.initView(activity);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 //        Log.setLogger(new Log.LogCallback() {
 //            @Override
 //            public void println(int priority, String tag, String msg) {
@@ -35,14 +44,6 @@ public class LauncherUI extends ActivityLifecycleHook {
 //            }
 //        });
 //        ReflectionUtils.setStaticFieldValue("com.tencent.mm.sdk.platformtools.y", "level", -1);
-
-        UiUtils.runOnUiThreadDelay(new Runnable() {
-            @Override
-            public void run() {
-                printLog();
-            }
-        }, 14000);
-
     }
 
 //            private static int level = 6;
@@ -50,7 +51,7 @@ public class LauncherUI extends ActivityLifecycleHook {
     @Override
     public void onActivityResumed(Activity activity) {
         super.onActivityResumed(activity);
-        printLog();
+//        printLog();
 //        Log.setLogger(new Log.LogCallback() {
 //            @Override
 //            public void println(int priority, String tag, String msg) {
@@ -60,9 +61,9 @@ public class LauncherUI extends ActivityLifecycleHook {
     }
 
     public void printLog() {
-        Log.d("ClassLoader", "mThisActivity:" + mThisActivity.getClass().getClassLoader().hashCode());
-        Log.d("ClassLoader", "Application:" + mThisActivity.getApplication().getClass().getClassLoader().hashCode());
-        Log.d("ClassLoader", "LauncherUI:" + LauncherUI.class.getClassLoader().hashCode());
+//        Log.d("ClassLoader", "mThisActivity:" + mThisActivity.getClass().getClassLoader().hashCode());
+//        Log.d("ClassLoader", "Application:" + mThisActivity.getApplication().getClass().getClassLoader().hashCode());
+//        Log.d("ClassLoader", "LauncherUI:" + LauncherUI.class.getClassLoader().hashCode());
 
 //        y.clb()
 //        y.DP(0);

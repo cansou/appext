@@ -21,9 +21,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly fileTree(dir: 'provided', include: ['*.jar'])
     implementation project(":appext")
-
-//    compile "com.agmbat:jutils:${JUTILS_VERSION}"
-//    compile 'com.tencent.wcdb:wcdb-android:1.0.4'
-//    compile 'com.tencent.mars:mars-xlog:1.0.6'
+    implementation "com.agmbat:jutils:1.2.4"
+    implementation "com.agmbat:api:1.0.1"
 
 }

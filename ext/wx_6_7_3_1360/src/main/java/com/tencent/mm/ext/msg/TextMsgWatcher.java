@@ -4,6 +4,8 @@ import android.app.ext.utils.UiUtils;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.agmbat.robot.RobotCenter;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -64,7 +66,7 @@ public class TextMsgWatcher {
                     UiUtils.post(new Runnable() {
                         @Override
                         public void run() {
-//                            ViewChatFooter.openChatSendMsg(msgInfo.talker, answer);
+                            ViewChatFooter.openChatSendMsg(msgInfo.talker, answer);
                         }
                     });
                 }
@@ -92,8 +94,8 @@ public class TextMsgWatcher {
         msg = removeRobotName(msg);
         msg = msg.trim();
         Log.i(TAG, "receive content:" + msg);
-        // TODO robot
-        return "ha ha";
+        RobotCenter robotCenter = new RobotCenter();
+        return robotCenter.talk(msg);
     }
 
     /**

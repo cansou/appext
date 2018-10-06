@@ -32,7 +32,7 @@ public class WeixinExtApp extends Application {
         app.registerActivityLifecycleCallbacks(new ActivityCallback());
 
 //        ActivityCallback.register(WeChatSplashActivityHook.ACTIVITY_NAME, new WeChatSplashActivityHook());
-//        ActivityCallback.register(LauncherUI.ACTIVITY_NAME, new LauncherUI());
+        ActivityCallback.register(LauncherUI.ACTIVITY_NAME, new LauncherUI());
         ActivityCallback.register(LuckyMoneyReceiveUI.ACTIVITY_NAME, new LuckyMoneyReceiveUI());
         DbReceiver.addHook(new ChatMsgWatcher());
         DbReceiver.register(app);
