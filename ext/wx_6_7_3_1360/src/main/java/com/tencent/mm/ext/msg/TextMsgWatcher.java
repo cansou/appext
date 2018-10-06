@@ -66,7 +66,7 @@ public class TextMsgWatcher {
                     UiUtils.post(new Runnable() {
                         @Override
                         public void run() {
-                            ViewChatFooter.openChatSendMsg(msgInfo.talker, answer);
+                            LauncherUIChat.openChatSendMsg(msgInfo.talker, answer);
                         }
                     });
                 }

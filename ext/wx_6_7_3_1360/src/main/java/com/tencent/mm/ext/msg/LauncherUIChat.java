@@ -9,19 +9,9 @@ import android.widget.EditText;
 
 import com.agmbat.utils.ReflectionUtils;
 
-//import com.tencent.mm.pluginsdk.ui.chat.ChatFooter;
-//import com.tencent.mm.ui.LauncherUI;
-//import com.tencent.mm.ui.widget.MMEditText;
-
-public class ViewChatFooter {
-
-//    private static View sChatFooter;
+public class LauncherUIChat {
 
     private static View.OnClickListener sSendClickListener;
-
-//    public static View get() {
-//        return sChatFooter;
-//    }
 
     private static Activity sActivity;
 
@@ -48,8 +38,22 @@ public class ViewChatFooter {
     }
 
 
+    /**
+     * 打开聊天界面
+     *
+     * @param talker
+     */
     private static void openChatUi(String talker) {
-//        LauncherUI.aTU().a(talker, null, false);
+        Object currentFragment = ReflectionUtils.invokeMethod(sActivity, "getCurrentFragmet");
+        if (currentFragment != null) {
+            if (currentFragment.getClass().getName().equals("com.tencent.mm.ui.chatting.y")) {
+                ReflectionUtils.invokeMethod(sActivity, "closeChatting",
+                        new Class[]{boolean.class},
+                        new Object[]{false});
+            }
+        }
+//        public final void com.tencent.mm.ui.LauncherUI.closeChatting(boolean)
+//       public com.tencent.mm.ui.x com.tencent.mm.ui.LauncherUI.getCurrentFragmet()
 //        public final void com.tencent.mm.ui.LauncherUI.startChatting(java.lang.String,android.os.Bundle,boolean);
         ReflectionUtils.invokeMethod(sActivity, "startChatting",
                 new Class[]{String.class, Bundle.class, boolean.class},
@@ -103,16 +107,6 @@ public class ViewChatFooter {
 
     public static void initView(Activity activity) {
         sActivity = activity;
-//        sChatFooter = null;
     }
 
-//    private static View getChatFooter() {
-//        if (sChatFooter == null) {
-//            ViewGroup viewGroup = sActivity.findViewById(android.R.id.content);
-//            sChatFooter = ViewUtils.findViewByClassName(viewGroup, "com.tencent.mm.pluginsdk.ui.chat.ChatFooter").get(0);
-//
-//
-//        }
-//        return sChatFooter;
-//    }
 }

@@ -5,7 +5,7 @@ import android.app.ext.ActivityLifecycleHook;
 import android.app.ext.utils.UiUtils;
 import android.os.Bundle;
 
-import com.tencent.mm.ext.msg.ViewChatFooter;
+import com.tencent.mm.ext.msg.LauncherUIChat;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -31,7 +31,7 @@ public class LauncherUI extends ActivityLifecycleHook {
             @Override
             public void run() {
                 try {
-                    ViewChatFooter.initView(activity);
+                    LauncherUIChat.initView(activity);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
