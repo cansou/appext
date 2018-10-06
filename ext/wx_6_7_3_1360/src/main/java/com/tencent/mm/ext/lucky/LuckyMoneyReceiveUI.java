@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * 监听LuckyMoneyReceiveUI这个Activity的生命周期
- * 此Activity显示拆红包界面
+ * 此Activity显示拆红包界面, 找到对应的button模拟点击拆开红包
  * <p>
  * com.tencent.mm.plugin.lukymoney.ui.LuckyMoneyReceiveUI
  */

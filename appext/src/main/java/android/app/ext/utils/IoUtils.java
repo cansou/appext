@@ -1,6 +1,8 @@
 package android.app.ext.utils;
 
 import java.io.Closeable;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -47,6 +49,36 @@ public class IoUtils {
         int len = 0;
         while ((len = in.read(buffer)) != EOF) {
             out.write(buffer, 0, len);
+        }
+    }
+
+    /**
+     * 将InputStream转存到文件中
+     *
+     * @param in      输入流
+     * @param outFile 输出文件
+     * @throws IOException If any error occurs during the copy.
+     */
+    public static void copyStream(InputStream in, File outFile) throws IOException {
+        copyStream(in, outFile, 0, null);
+    }
+
+    /**
+     * 将InputStream转存到文件中
+     *
+     * @param in
+     * @param outFile
+     * @param total
+     * @param l
+     * @throws IOException
+     */
+    public static void copyStream(InputStream in, File outFile, long total, ProgressListener l) throws IOException {
+        FileOutputStream fos = null;
+        try {
+            fos = openFileOutputStream(outFile);
+            copyStream(in, fos, total, l);
+        } finally {
+            closeQuietly(fos);
         }
     }
 
@@ -103,7 +135,6 @@ public class IoUtils {
      *
      * @param stream the stream that contains data.
      * @return the result string.
-     *
      * @throws IOException an I/O error occurred.
      */
     public static String loadContent(InputStream stream) throws IOException {
@@ -116,7 +147,6 @@ public class IoUtils {
      * @param stream      the stream that contains data.
      * @param charsetName the encoding of the data.
      * @return the result string.
-     *
      * @throws IOException an I/O error occurred.
      */
     public static String loadContent(InputStream stream, String charsetName) throws IOException {
@@ -144,6 +174,20 @@ public class IoUtils {
 
     private static boolean isEmpty(CharSequence charSequence) {
         return charSequence == null || charSequence.length() == 0;
+    }
+
+    /**
+     * Open new file out put
+     *
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    public static FileOutputStream openFileOutputStream(File file) throws IOException {
+        file.delete();
+        file.getParentFile().mkdirs();
+        file.createNewFile();
+        return new FileOutputStream(file);
     }
 
 }
