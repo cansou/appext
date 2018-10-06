@@ -6,11 +6,8 @@ import android.app.ext.utils.ViewUtils;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-
-import java.util.List;
 
 /**
  * 监听LuckyMoneyReceiveUI这个Activity的生命周期
@@ -44,7 +41,9 @@ public class LuckyMoneyReceiveUI extends ActivityLifecycleHook {
         super.onActivityResumed(activity);
         Log.d(TAG, "onActivityResumed");
         Button button = findOpenButton(activity);
-        ViewUtils.performClick(button);
+        // 如果点击时小于300毫秒会存在点击事件丢失的情况
+        int delay = ViewUtils.random(300, 500);
+        ViewUtils.performClick(button, delay);
     }
 
     /**
