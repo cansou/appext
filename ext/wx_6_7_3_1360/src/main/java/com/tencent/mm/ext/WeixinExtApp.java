@@ -8,7 +8,7 @@ import android.app.ext.utils.DexUtils;
 import android.app.ext.utils.ZipUtils;
 import android.content.Context;
 
-import com.tencent.mm.ext.lucky.LuckyMoneyReceiveUI;
+import com.tencent.mm.ext.msg.LuckyMoneyReceiveUI;
 import com.tencent.mm.ext.msg.ChatMsgWatcher;
 
 import java.io.File;
@@ -31,7 +31,6 @@ public class WeixinExtApp extends Application {
         unzipPatch(app);
         app.registerActivityLifecycleCallbacks(new ActivityCallback());
 
-//        ActivityCallback.register(WeChatSplashActivityHook.ACTIVITY_NAME, new WeChatSplashActivityHook());
         ActivityCallback.register(LauncherUI.ACTIVITY_NAME, new LauncherUI());
         ActivityCallback.register(LuckyMoneyReceiveUI.ACTIVITY_NAME, new LuckyMoneyReceiveUI());
         DbReceiver.addHook(new ChatMsgWatcher());

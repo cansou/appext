@@ -1,4 +1,4 @@
-package com.tencent.mm.ext.lucky;
+package com.tencent.mm.ext.msg;
 
 public class LuckyInfo {
 

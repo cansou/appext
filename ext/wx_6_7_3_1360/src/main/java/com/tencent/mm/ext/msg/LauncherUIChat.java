@@ -79,18 +79,13 @@ public class LauncherUIChat {
             });
         }
         Debug.printStackTrace();
-        setMsg(msg);
+        getEditText().setText(msg);
         clickSend();
     }
 
     private static void clickSend() {
         View sendButton = getSendButton();
         sSendClickListener.onClick(sendButton);
-    }
-
-    private static void setMsg(String msg) {
-        final EditText editText = getEditText();
-        editText.setText(msg);
     }
 
     private static View getSendButton() {

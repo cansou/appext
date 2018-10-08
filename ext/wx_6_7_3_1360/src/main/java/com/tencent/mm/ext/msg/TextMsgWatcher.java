@@ -15,16 +15,28 @@ import java.util.concurrent.Executors;
  * 监测试文本消息
  */
 public class TextMsgWatcher {
+
     private static final boolean DEBUG = false;
 
     private static final String TAG = TextMsgWatcher.class.getSimpleName();
 
-    private static boolean sNeedAtMe = true;
     private static final int FIVE_MINUTES = 5 * 60 * 1000;
     /**
      * 机器在微信中的名称
      */
     private static final List<String> ROBOT_NAME_LIST = new ArrayList<>();
+
+    /**
+     * 本机控制器是否启用
+     */
+    private static boolean sEnable = true;
+
+    private static boolean sNeedAtMe = true;
+
+    /**
+     * 后台线程为单线程
+     */
+    private static final ExecutorService SINGLE_THREAD_EXECUTOR = Executors.newSingleThreadExecutor();
 
     static {
         if (DEBUG) {
@@ -36,28 +48,14 @@ public class TextMsgWatcher {
         }
     }
 
-    /**
-     * 本机控制器是否启用
-     */
-    private static boolean sEnable = true;
-
-    /**
-     * 后台线程为单线程
-     */
-    private static final ExecutorService SINGLE_THREAD_EXECUTOR = Executors.newSingleThreadExecutor();
-
     public static void setEnable(boolean enable) {
         sEnable = enable;
     }
 
     public static void onReceiveChatMsg(final MsgInfo msgInfo) {
-        if (!isTextMsg(msgInfo)) {
-            return;
-        }
         if (!sEnable) {
             return;
         }
-
         SINGLE_THREAD_EXECUTOR.execute(new Runnable() {
             @Override
             public void run() {
@@ -124,16 +122,6 @@ public class TextMsgWatcher {
             }
         }
         return false;
-    }
-
-    /**
-     * 是否为文字消息
-     *
-     * @param msgInfo
-     * @return
-     */
-    private static boolean isTextMsg(MsgInfo msgInfo) {
-        return !msgInfo.isSend() && msgInfo.type == 1;
     }
 
     private static void setNeedAtMeAfter(int mills) {
