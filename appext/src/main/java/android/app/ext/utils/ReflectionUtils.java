@@ -314,4 +314,25 @@ public class ReflectionUtils {
         }
         return null;
     }
+
+    /**
+     * 利用反射实现对象之间相同属性复制, 暂时只支持同一数据类型
+     *
+     * @param source 要复制的
+     * @param target 复制给
+     */
+    public static void copyProperties(Object source, Object target) {
+        if (source == null || target == null) {
+            return;
+        }
+        Field[] fields = source.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            try {
+                field.set(target, field.get(source));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

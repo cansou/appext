@@ -1,2 +1,3 @@
 include ':appext'
 include ':ext:wx_6_7_3_1360'
+include ':ext:hi_7_9_2_0_223'
