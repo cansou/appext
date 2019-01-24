@@ -20,7 +20,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly fileTree(dir: 'provided', include: ['*.jar'])
-    implementation project(":appext")
+    implementation project(':appextlibrary')
     implementation "com.agmbat:jutils:1.2.4"
     implementation "com.agmbat:api:1.0.1"
 

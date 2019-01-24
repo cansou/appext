@@ -5,11 +5,12 @@ import android.app.Application;
 import android.app.ext.ActivityCallback;
 import android.app.ext.DbReceiver;
 import android.app.ext.utils.DexUtils;
+import android.app.ext.utils.ExtAppUtils;
 import android.app.ext.utils.ZipUtils;
 import android.content.Context;
 
-import com.tencent.mm.ext.msg.LuckyMoneyReceiveUI;
 import com.tencent.mm.ext.msg.ChatMsgWatcher;
+import com.tencent.mm.ext.msg.LuckyMoneyReceiveUI;
 
 import java.io.File;
 
@@ -27,6 +28,12 @@ public class WeixinExtApp extends Application {
         // 不要调用super.onCreate
 //        super.onCreate();
         Application app = (Application) getBaseContext();
+
+        // 如果当前类名不是真正的Application则直接返回
+        if (!app.getClass().getName().equals(app.getApplicationInfo().className)) {
+            return;
+        }
+
         sContext = app;
         unzipPatch(app);
         app.registerActivityLifecycleCallbacks(new ActivityCallback());
@@ -37,8 +44,9 @@ public class WeixinExtApp extends Application {
         DbReceiver.register(app);
     }
 
+
     private static void unzipPatch(Context context) {
-        String apkName = "com.tencent.mm_844a7871663f7f79.apk";
+        String apkName = ExtAppUtils.getPluginApkName(context);
         File extApk = new File(context.getFilesDir(), apkName);
         String dexName = "assets/db.dex";
         File outFile = new File(context.getFilesDir(), "db.dex");

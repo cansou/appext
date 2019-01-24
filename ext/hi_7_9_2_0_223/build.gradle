@@ -20,5 +20,5 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly fileTree(dir: 'provided', include: ['*.jar'])
-    implementation project(":appext")
+    implementation project(':appextlibrary')
 }

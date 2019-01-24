@@ -46,15 +46,6 @@ public class LuckyMoneyActivity extends ActivityLifecycleHook {
         context.startActivity(intent);
     }
 
-    private boolean isFromAppExt(Activity activity) {
-        Intent intent = activity.getIntent();
-        if (intent != null) {
-            return intent.getBooleanExtra(KEY_FORM_APPEXT, false);
-        }
-        return false;
-    }
-
-
     @Override
     public void onActivityCreated(final Activity activity, Bundle bundle) {
         Log.d(TAG, "onActivityCreated");
@@ -104,5 +95,13 @@ public class LuckyMoneyActivity extends ActivityLifecycleHook {
         if (intent != null) {
             intent.putExtra(KEY_FORM_APPEXT, false);
         }
+    }
+
+    private boolean isFromAppExt(Activity activity) {
+        Intent intent = activity.getIntent();
+        if (intent != null) {
+            return intent.getBooleanExtra(KEY_FORM_APPEXT, false);
+        }
+        return false;
     }
 }
