@@ -3,18 +3,12 @@ package com.baidu.hi.ext;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.app.ext.ActivityCallback;
-import android.app.ext.utils.DexUtils;
 import android.app.ext.utils.Log;
 import android.app.ext.utils.ReflectionUtils;
 import android.app.ext.utils.UiUtils;
-import android.app.ext.utils.ZipUtils;
 import android.content.Context;
 
 import com.baidu.hi.utils.HiLogCenter;
-import com.baidu.hi.utils.LogUtil;
-
-import java.io.File;
-import java.util.ArrayList;
 
 public class HiExtApp extends Application {
 
@@ -49,7 +43,7 @@ public class HiExtApp extends Application {
         }
 
         // 解决多个class loader问题
-        if (isRegisterCallback(app)) {
+        if (ActivityCallback.isRegisterCallback(app)) {
             return;
         }
 
@@ -78,27 +72,6 @@ public class HiExtApp extends Application {
             }
         }, 5000);
         ActivityCallback.register(LuckyMoneyActivity.ACTIVITY_NAME, new LuckyMoneyActivity());
-    }
-
-    /**
-     * 是否已注册过回调
-     *
-     * @param app
-     * @return
-     */
-    private boolean isRegisterCallback(Application app) {
-        // ArrayList<ActivityLifecycleCallbacks> mActivityLifecycleCallbacks
-        ArrayList<ActivityLifecycleCallbacks> activityLifecycleCallbacks = (ArrayList<ActivityLifecycleCallbacks>)
-                ReflectionUtils.getFieldValue(app, "mActivityLifecycleCallbacks");
-        if (activityLifecycleCallbacks == null) {
-            return false;
-        }
-        for (Object callback : activityLifecycleCallbacks) {
-            if (callback.getClass().getName().equals(ActivityCallback.class.getName())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**

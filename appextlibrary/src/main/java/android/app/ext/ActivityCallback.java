@@ -3,8 +3,10 @@ package android.app.ext;
 import android.app.Activity;
 import android.app.Application;
 import android.app.ext.utils.Log;
+import android.app.ext.utils.ReflectionUtils;
 import android.os.Bundle;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -22,6 +24,27 @@ public class ActivityCallback implements Application.ActivityLifecycleCallbacks 
      */
     public static void register(String activityClassName, ActivityLifecycleHook activity) {
         ACTIVITY_MAP.put(activityClassName, activity);
+    }
+
+    /**
+     * 是否已注册过回调
+     *
+     * @param app
+     * @return
+     */
+    public static boolean isRegisterCallback(Application app) {
+        // ArrayList<ActivityLifecycleCallbacks> mActivityLifecycleCallbacks
+        ArrayList<Application.ActivityLifecycleCallbacks> activityLifecycleCallbacks = (ArrayList<Application.ActivityLifecycleCallbacks>)
+                ReflectionUtils.getFieldValue(app, "mActivityLifecycleCallbacks");
+        if (activityLifecycleCallbacks == null) {
+            return false;
+        }
+        for (Object callback : activityLifecycleCallbacks) {
+            if (callback.getClass().getName().equals(ActivityCallback.class.getName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static ActivityLifecycleHook getActivity(Activity activity) {

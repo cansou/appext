@@ -7,6 +7,7 @@ import android.content.ContextWrapper;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.os.Environment;
 import android.os.Process;
 import android.text.TextUtils;
@@ -18,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.nio.channels.FileChannel;
@@ -28,9 +30,13 @@ import dalvik.system.DexClassLoader;
 
 /**
  * android-9.0.0_r1/frameworks/base/core/java/android/app/ext/
- *
+ * <p>
  * 该包下的代码是用于插入到宿主app启动位置[Application.onCreate]
  * 在系统层插入代码, 加载app扩展代码运行
+ * <p>
+ * 或者将smali代码插入到app的Application.onCreate方法中
+ * <p>
+ * 此类剥离只用到的一些工具类, 尽量减少代码大小
  *
  * @hide
  */
@@ -63,11 +69,17 @@ public class AppExt {
         }
         // 使用宿主app的class loader
         ClassLoader parent = context.getClass().getClassLoader();
-        DexClassLoader classLoader = new DexClassLoader(apkPath, null, null, parent);
+        // 4.4 机器需要创建对应的目录
+        File dexDir = new File(context.getFilesDir(), "ext_dex");
+        dexDir.mkdirs();
+        File libDir = new File(context.getFilesDir(), "ext_lib");
+        libDir.mkdirs();
+        DexClassLoader classLoader = new DexClassLoader(apkPath, dexDir.getAbsolutePath(),
+                libDir.getAbsolutePath(), parent);
         PackageInfo packageInfo = getPackageArchiveInfo(context, apkPath);
         String appClass = packageInfo.applicationInfo.className;
         Log.d(TAG, "Load app ext app class:" + appClass);
-        if (appClass == null) {
+        if (TextUtils.isEmpty(appClass)) {
             return;
         }
         Application app = (Application) newInstance(classLoader, appClass);
@@ -80,22 +92,28 @@ public class AppExt {
     }
 
     /**
-     * 准备apk
+     * 准备ext apk
      *
      * @return
      */
     private static String prepareExtApk(Context context) {
         String processName = getProcessName(context);
+        if (TextUtils.isEmpty(processName)) {
+            return null;
+        }
+        String apkNamePrefix = processName.replace(":", "-");
         String apkMd5 = getApkMd516(context);
         // 加上md5作为校验,确保apk版本升级后ext不可用的问题
-        String apkName = processName.replace(":", "-") + "_" + apkMd5 + ".apk";
+        String apkName = apkNamePrefix + "_" + apkMd5 + ".apk";
         Log.d(TAG, "Prepare ext apk name:" + apkName);
         File sdcardApk = new File(Environment.getExternalStorageDirectory(), apkName);
         File cacheApk = new File(context.getFilesDir(), apkName);
         // 如果sdcard文件不存在
         if (!sdcardApk.exists()) {
+            // 如果缓存文件不存在
             if (!cacheApk.exists()) {
-                return null;
+                // 从assets中获取文件
+                return prepareExtApkFromAsset(context, apkNamePrefix);
             }
             return cacheApk.getAbsolutePath();
         }
@@ -106,18 +124,49 @@ public class AppExt {
         if (sdcardMd5.equals(cacheMd5)) {
             // 如果md5一致
             return cacheApk.getAbsolutePath();
-        } else {
-            // md5不一致, 表示有更新, copy一份
-            // cp file
-            copyFileNio(sdcardApk, cacheApk);
+        }
+        // md5不一致, 表示有更新, copy一份
+        // cp file
+        boolean success = copyFileNio(sdcardApk, cacheApk);
+        if (success) {
             return cacheApk.getAbsolutePath();
         }
+        return null;
     }
 
-
     /**
-     * 剥离只用到的一些工具类, 尽量减少代码大小
+     * 准备ext.apk,从assets目录中复制出来, 用于只安装apk插件的场景
+     *
+     * @param context
+     * @return
      */
+    private static String prepareExtApkFromAsset(Context context, String apkNamePrefix) {
+        String name = apkNamePrefix + ".apk";
+        Log.d(TAG, "Prepare ext apk name:" + apkNamePrefix + ", from assets");
+        File cacheApk = new File(context.getFilesDir(), name);
+        AssetManager assetManager = context.getAssets();
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            in = assetManager.open(name);
+            out = new FileOutputStream(cacheApk);
+            byte[] buffer = new byte[10 * 1024];
+            int len = 0;
+            while ((len = in.read(buffer)) != -1) {
+                out.write(buffer, 0, len);
+            }
+            return cacheApk.getAbsolutePath();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (cacheApk.exists()) {
+                cacheApk.delete();
+            }
+        } finally {
+            closeQuietly(in);
+            closeQuietly(out);
+        }
+        return null;
+    }
 
     /**
      * 获取进程名称
@@ -156,6 +205,12 @@ public class AppExt {
         return getMd516bit(md5);
     }
 
+    /**
+     * 计算文件的md5值
+     *
+     * @param file
+     * @return
+     */
     private static String md5File(File file) {
         if (file == null || !file.exists() || file.isDirectory()) {
             return null;
@@ -255,8 +310,11 @@ public class AppExt {
             out = fos.getChannel(); // 得到对应的文件通道
             in.transferTo(0, in.size(), out); // 连接两个通道，并且从in通道读取，然后写入out通道
             return true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            if (dest.exists()) {
+                dest.delete();
+            }
         } finally {
             closeQuietly(fis);
             closeQuietly(in);
@@ -276,8 +334,8 @@ public class AppExt {
     private static Object newInstance(ClassLoader classLoader, String className) {
         try {
             Class<?> cls = classLoader.loadClass(className);
-            Constructor<?> constructor = cls.getConstructor(new Class[]{});
-            return constructor.newInstance(new Object[]{});
+            Constructor<?> constructor = cls.getConstructor();
+            return constructor.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -291,31 +349,18 @@ public class AppExt {
      * @param context
      */
     private static void attachBaseContext(ContextWrapper wrapper, Context context) {
-        invokeMethod(wrapper, "attachBaseContext", new Class[]{Context.class}, new
-                Object[]{context});
-    }
-
-    /**
-     * 直接调用对象方法, 而忽略修饰符(private, protected, default)
-     *
-     * @param object         the object
-     * @param methodName     the name of method
-     * @param parameterTypes the parameter types of the requested method. {@code (Class[]) null} is equivalent to the
-     *                       empty array.
-     * @param parameters     the arguments to the method
-     * @return the result
-     */
-    private static Object invokeMethod(Object object, String methodName, Class<?>[] parameterTypes, Object[] parameters) {
-        Method method = getDeclaredMethod(object, methodName, parameterTypes);
+        String methodName = "attachBaseContext";
+        Class<?>[] parameterTypes = new Class[]{Context.class};
+        Object[] parameters = new Object[]{context};
+        Method method = getDeclaredMethod(wrapper, methodName, parameterTypes);
         if (method != null) {
             method.setAccessible(true);
             try {
-                return method.invoke(object, parameters);
+                method.invoke(wrapper, parameters);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return null;
     }
 
     /**

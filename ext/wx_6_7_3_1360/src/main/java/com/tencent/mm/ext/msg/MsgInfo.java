@@ -37,9 +37,9 @@ public class MsgInfo {
      */
     public String talker;
 
-    public long msg_svr_id;
+    public long msgSvrId;
 
-    public long msg_id;
+    public long msgId;
 
     /**
      * 消息创建时间
@@ -138,10 +138,10 @@ public class MsgInfo {
         MsgInfo info = new MsgInfo();
         info.type = values.getAsInteger(KEY_TYPE);
         info.talker = values.getAsString(KEY_TALKER);
-        info.msg_id = values.getAsLong(KEY_MSG_ID);
+        info.msgId = values.getAsLong(KEY_MSG_ID);
         info.content = values.getAsString(KEY_CONTENT);
         if (values.containsKey(KEY_MSG_SVR_ID)) {
-            info.msg_svr_id = values.getAsLong(KEY_MSG_SVR_ID);
+            info.msgSvrId = values.getAsLong(KEY_MSG_SVR_ID);
         }
         info.create = values.getAsLong(KEY_CREATE_TIME);
         info.issend = values.getAsInteger(KEY_IS_SEND);

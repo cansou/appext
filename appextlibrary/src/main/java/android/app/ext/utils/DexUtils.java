@@ -1,12 +1,9 @@
 package android.app.ext.utils;
 
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.content.res.Resources;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 import dalvik.system.DexClassLoader;
 import dalvik.system.PathClassLoader;
@@ -15,10 +12,12 @@ public class DexUtils {
 
     public static void addClassLoader(Context context, ClassLoader dexClassLoader) {
         try {
-            Object baseDexElements = getDexElements(getPathList(getPathClassLoader(context)));
+            PathClassLoader pathClassLoader = getPathClassLoader(context);
+            Object pathList = getPathList(pathClassLoader);
+
+            Object baseDexElements = getDexElements(getPathList(pathClassLoader));
             Object newDexElements = getDexElements(getPathList(dexClassLoader));
             Object allDexElements = combineArray(baseDexElements, newDexElements);
-            Object pathList = getPathList(getPathClassLoader(context));
             setField(pathList, pathList.getClass(), "dexElements", allDexElements);
         } catch (Exception e) {
             e.printStackTrace();
@@ -26,36 +25,39 @@ public class DexUtils {
     }
 
     /**
-     * 创建插件资源
+     * 将类声明放在第一行
      *
-     * @param pluginPath
+     * @param context
+     * @param dexPath
+     * @param optimizedDirectory
+     * @param librarySearchPath
      * @return
      */
-    public static void addResources(Resources resources, String pluginPath) {
+    public static boolean injectDexAtFirst(Context context, String dexPath, String optimizedDirectory,
+                                           String librarySearchPath) {
         try {
-            AssetManager assets = resources.getAssets();
-            Method addAssetPath = AssetManager.class.getMethod("addAssetPath", String.class);
-            addAssetPath.invoke(assets, pluginPath);
+            PathClassLoader pathClassLoader = getPathClassLoader(context);
+            DexClassLoader dexClassLoader = new DexClassLoader(dexPath, optimizedDirectory, librarySearchPath, pathClassLoader);
+            Object pathList = getPathList(pathClassLoader);
+            Object baseDexElements = getDexElements(pathList);
+            Object newDexElements = getDexElements(getPathList(dexClassLoader));
+            Object allDexElements = combineArray(newDexElements, baseDexElements);
+            setField(pathList, pathList.getClass(), "dexElements", allDexElements);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    public static void injectDexAtFirst(Context context, String dexPath, String defaultDexOptPath) throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException {
-        PathClassLoader pathClassLoader = getPathClassLoader(context);
-        DexClassLoader dexClassLoader = new DexClassLoader(dexPath, defaultDexOptPath, dexPath, pathClassLoader);
-        Object baseDexElements = getDexElements(getPathList(pathClassLoader));
-        Object newDexElements = getDexElements(getPathList(dexClassLoader));
-
-        Object allDexElements = combineArray(newDexElements, baseDexElements);
-
-        Object pathList = getPathList(pathClassLoader);
-        setField(pathList, pathList.getClass(), "dexElements", allDexElements);
-    }
-
+    /**
+     * 获取Path ClassLoader
+     *
+     * @param context
+     * @return
+     */
     private static PathClassLoader getPathClassLoader(Context context) {
         PathClassLoader pathClassLoader = (PathClassLoader) context.getClassLoader();
-        // (PathClassLoader) DexUtils.class.getClassLoader();
         return pathClassLoader;
     }
 
@@ -69,16 +71,24 @@ public class DexUtils {
         return getField(baseDexClassLoader, Class.forName("dalvik.system.BaseDexClassLoader"), "pathList");
     }
 
+
+    /**
+     * 合并数组得到新的数组
+     *
+     * @param firstArray
+     * @param secondArray
+     * @return
+     */
     private static Object combineArray(Object firstArray, Object secondArray) {
-        Class<?> localClass = firstArray.getClass().getComponentType();
+        Class<?> componentType = firstArray.getClass().getComponentType();
         int firstArrayLength = Array.getLength(firstArray);
         int allLength = firstArrayLength + Array.getLength(secondArray);
-        Object result = Array.newInstance(localClass, allLength);
-        for (int k = 0; k < allLength; ++k) {
-            if (k < firstArrayLength) {
-                Array.set(result, k, Array.get(firstArray, k));
+        Object result = Array.newInstance(componentType, allLength);
+        for (int i = 0; i < allLength; ++i) {
+            if (i < firstArrayLength) {
+                Array.set(result, i, Array.get(firstArray, i));
             } else {
-                Array.set(result, k, Array.get(secondArray, k - firstArrayLength));
+                Array.set(result, i, Array.get(secondArray, i - firstArrayLength));
             }
         }
         return result;

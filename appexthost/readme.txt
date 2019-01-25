@@ -1,0 +1,2 @@
+重新生成新的smali文件
+sh appexthost/generate_smali.sh

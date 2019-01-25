@@ -11,7 +11,7 @@
 .method static constructor <clinit>()V
     .registers 1
 
-    .line 39
+    .line 45
     const-class v0, Landroid/app/ext/AppExt;
 
     invoke-virtual {v0}, Ljava/lang/Class;->getSimpleName()Ljava/lang/String;
@@ -26,7 +26,7 @@
 .method public constructor <init>()V
     .registers 1
 
-    .line 37
+    .line 43
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
     return-void
@@ -36,12 +36,12 @@
     .registers 9
     .param p0, "data"    # [B
 
-    .line 201
+    .line 256
     new-instance v0, Ljava/lang/StringBuilder;
 
     invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
 
-    .line 202
+    .line 257
     .local v0, "sb":Ljava/lang/StringBuilder;
     array-length v1, p0
 
@@ -54,7 +54,7 @@
 
     aget-byte v4, p0, v3
 
-    .line 203
+    .line 258
     .local v4, "b":B
     const-string v5, "%02x"
 
@@ -74,13 +74,13 @@
 
     invoke-virtual {v0, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    .line 202
+    .line 257
     .end local v4    # "b":B
     add-int/lit8 v3, v3, 0x1
 
     goto :goto_8
 
-    .line 205
+    .line 260
     :cond_21
     invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 
@@ -94,9 +94,11 @@
     .param p0, "wrapper"    # Landroid/content/ContextWrapper;
     .param p1, "context"    # Landroid/content/Context;
 
-    .line 294
+    .line 352
     const-string v0, "attachBaseContext"
 
+    .line 353
+    .local v0, "methodName":Ljava/lang/String;
     const/4 v1, 0x1
 
     new-array v2, v1, [Ljava/lang/Class;
@@ -107,13 +109,46 @@
 
     aput-object v3, v2, v4
 
-    new-array v1, v1, [Ljava/lang/Object;
+    .line 354
+    .local v2, "parameterTypes":[Ljava/lang/Class;, "[Ljava/lang/Class<*>;"
+    new-array v3, v1, [Ljava/lang/Object;
 
-    aput-object p1, v1, v4
+    aput-object p1, v3, v4
 
-    invoke-static {p0, v0, v2, v1}, Landroid/app/ext/AppExt;->invokeMethod(Ljava/lang/Object;Ljava/lang/String;[Ljava/lang/Class;[Ljava/lang/Object;)Ljava/lang/Object;
+    .line 355
+    .local v3, "parameters":[Ljava/lang/Object;
+    invoke-static {p0, v0, v2}, Landroid/app/ext/AppExt;->getDeclaredMethod(Ljava/lang/Object;Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
 
-    .line 296
+    move-result-object v4
+
+    .line 356
+    .local v4, "method":Ljava/lang/reflect/Method;
+    if-eqz v4, :cond_1f
+
+    .line 357
+    invoke-virtual {v4, v1}, Ljava/lang/reflect/Method;->setAccessible(Z)V
+
+    .line 359
+    :try_start_17
+    invoke-virtual {v4, p0, v3}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    :try_end_1a
+    .catch Ljava/lang/Exception; {:try_start_17 .. :try_end_1a} :catch_1b
+
+    .line 362
+    goto :goto_1f
+
+    .line 360
+    :catch_1b
+    move-exception v1
+
+    .line 361
+    .local v1, "e":Ljava/lang/Exception;
+    invoke-virtual {v1}, Ljava/lang/Exception;->printStackTrace()V
+
+    .line 364
+    .end local v1    # "e":Ljava/lang/Exception;
+    :cond_1f
+    :goto_1f
     return-void
 .end method
 
@@ -121,27 +156,27 @@
     .registers 2
     .param p0, "closeable"    # Ljava/io/Closeable;
 
-    .line 214
+    .line 269
     if-eqz p0, :cond_a
 
-    .line 216
+    .line 271
     :try_start_2
     invoke-interface {p0}, Ljava/io/Closeable;->close()V
     :try_end_5
     .catch Ljava/io/IOException; {:try_start_2 .. :try_end_5} :catch_6
 
-    .line 219
+    .line 274
     goto :goto_a
 
-    .line 217
+    .line 272
     :catch_6
     move-exception v0
 
-    .line 218
+    .line 273
     .local v0, "e":Ljava/io/IOException;
     invoke-virtual {v0}, Ljava/io/IOException;->printStackTrace()V
 
-    .line 221
+    .line 276
     .end local v0    # "e":Ljava/io/IOException;
     :cond_a
     :goto_a
@@ -153,22 +188,22 @@
     .param p0, "src"    # Ljava/io/File;
     .param p1, "dest"    # Ljava/io/File;
 
-    .line 247
+    .line 302
     const/4 v0, 0x0
 
-    .line 248
+    .line 303
     .local v0, "fis":Ljava/io/FileInputStream;
     const/4 v1, 0x0
 
-    .line 249
+    .line 304
     .local v1, "fos":Ljava/io/FileOutputStream;
     const/4 v2, 0x0
 
-    .line 250
+    .line 305
     .local v2, "in":Ljava/nio/channels/FileChannel;
     const/4 v3, 0x0
 
-    .line 252
+    .line 307
     .local v3, "out":Ljava/nio/channels/FileChannel;
     :try_start_4
     new-instance v4, Ljava/io/FileInputStream;
@@ -177,28 +212,28 @@
 
     move-object v0, v4
 
-    .line 253
+    .line 308
     new-instance v4, Ljava/io/FileOutputStream;
 
     invoke-direct {v4, p1}, Ljava/io/FileOutputStream;-><init>(Ljava/io/File;)V
 
     move-object v1, v4
 
-    .line 254
+    .line 309
     invoke-virtual {v0}, Ljava/io/FileInputStream;->getChannel()Ljava/nio/channels/FileChannel;
 
     move-result-object v4
 
     move-object v2, v4
 
-    .line 255
+    .line 310
     invoke-virtual {v1}, Ljava/io/FileOutputStream;->getChannel()Ljava/nio/channels/FileChannel;
 
     move-result-object v4
 
     move-object v3, v4
 
-    .line 256
+    .line 311
     const-wide/16 v6, 0x0
 
     invoke-virtual {v2}, Ljava/nio/channels/FileChannel;->size()J
@@ -211,78 +246,90 @@
 
     invoke-virtual/range {v5 .. v10}, Ljava/nio/channels/FileChannel;->transferTo(JJLjava/nio/channels/WritableByteChannel;)J
     :try_end_25
-    .catch Ljava/io/IOException; {:try_start_4 .. :try_end_25} :catch_35
+    .catch Ljava/lang/Exception; {:try_start_4 .. :try_end_25} :catch_35
     .catchall {:try_start_4 .. :try_end_25} :catchall_33
 
-    .line 257
+    .line 312
     const/4 v4, 0x1
 
-    .line 261
+    .line 319
     invoke-static {v0}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
 
-    .line 262
+    .line 320
     invoke-static {v2}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
 
-    .line 263
+    .line 321
     invoke-static {v1}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
 
-    .line 264
+    .line 322
     invoke-static {v3}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
 
-    .line 257
+    .line 312
     return v4
 
-    .line 261
+    .line 319
     :catchall_33
     move-exception v4
 
-    goto :goto_48
+    goto :goto_51
 
-    .line 258
+    .line 313
     :catch_35
     move-exception v4
 
-    .line 259
-    .local v4, "e":Ljava/io/IOException;
+    .line 314
+    .local v4, "e":Ljava/lang/Exception;
     :try_start_36
-    invoke-virtual {v4}, Ljava/io/IOException;->printStackTrace()V
-    :try_end_39
-    .catchall {:try_start_36 .. :try_end_39} :catchall_33
+    invoke-virtual {v4}, Ljava/lang/Exception;->printStackTrace()V
 
-    .line 261
-    .end local v4    # "e":Ljava/io/IOException;
+    .line 315
+    invoke-virtual {p1}, Ljava/io/File;->exists()Z
+
+    move-result v5
+
+    if-eqz v5, :cond_42
+
+    .line 316
+    invoke-virtual {p1}, Ljava/io/File;->delete()Z
+    :try_end_42
+    .catchall {:try_start_36 .. :try_end_42} :catchall_33
+
+    .line 319
+    .end local v4    # "e":Ljava/lang/Exception;
+    :cond_42
     invoke-static {v0}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
 
-    .line 262
+    .line 320
     invoke-static {v2}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
 
-    .line 263
+    .line 321
     invoke-static {v1}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
 
-    .line 264
+    .line 322
     invoke-static {v3}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
 
-    .line 265
+    .line 323
     nop
 
-    .line 266
+    .line 324
     const/4 v4, 0x0
 
     return v4
 
-    .line 261
-    :goto_48
+    .line 319
+    :goto_51
     invoke-static {v0}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
 
-    .line 262
+    .line 320
     invoke-static {v2}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
 
-    .line 263
+    .line 321
     invoke-static {v1}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
 
-    .line 264
+    .line 322
     invoke-static {v3}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
 
+    .line 323
     throw v4
 .end method
 
@@ -290,16 +337,16 @@
     .registers 5
     .param p0, "context"    # Landroid/content/Context;
 
-    .line 153
+    .line 202
     invoke-virtual {p0}, Landroid/content/Context;->getApplicationInfo()Landroid/content/pm/ApplicationInfo;
 
     move-result-object v0
 
-    .line 154
+    .line 203
     .local v0, "applicationInfo":Landroid/content/pm/ApplicationInfo;
     iget-object v1, v0, Landroid/content/pm/ApplicationInfo;->sourceDir:Ljava/lang/String;
 
-    .line 155
+    .line 204
     .local v1, "path":Ljava/lang/String;
     new-instance v2, Ljava/io/File;
 
@@ -309,7 +356,7 @@
 
     move-result-object v2
 
-    .line 156
+    .line 205
     .local v2, "md5":Ljava/lang/String;
     invoke-static {v2}, Landroid/app/ext/AppExt;->getMd516bit(Ljava/lang/String;)Ljava/lang/String;
 
@@ -334,20 +381,20 @@
         }
     .end annotation
 
-    .line 331
+    .line 376
     .local p2, "parameterTypes":[Ljava/lang/Class;, "[Ljava/lang/Class<*>;"
     invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
 
     move-result-object v0
 
-    .line 331
+    .line 376
     .local v0, "cls":Ljava/lang/Class;, "Ljava/lang/Class<*>;"
     :goto_4
     const-class v1, Ljava/lang/Object;
 
     if-eq v0, v1, :cond_13
 
-    .line 333
+    .line 378
     :try_start_8
     invoke-virtual {v0, p1, p2}, Ljava/lang/Class;->getDeclaredMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
 
@@ -357,18 +404,18 @@
 
     return-object v1
 
-    .line 334
+    .line 379
     :catch_d
     move-exception v1
 
-    .line 331
+    .line 376
     invoke-virtual {v0}, Ljava/lang/Class;->getSuperclass()Ljava/lang/Class;
 
     move-result-object v0
 
     goto :goto_4
 
-    .line 338
+    .line 383
     .end local v0    # "cls":Ljava/lang/Class;, "Ljava/lang/Class<*>;"
     :cond_13
     const/4 v0, 0x0
@@ -380,7 +427,7 @@
     .registers 3
     .param p0, "md532bit"    # Ljava/lang/String;
 
-    .line 188
+    .line 243
     if-eqz p0, :cond_12
 
     invoke-virtual {p0}, Ljava/lang/String;->length()I
@@ -391,7 +438,7 @@
 
     goto :goto_12
 
-    .line 191
+    .line 246
     :cond_9
     const/16 v0, 0x8
 
@@ -403,7 +450,7 @@
 
     return-object v0
 
-    .line 189
+    .line 244
     :cond_12
     :goto_12
     return-object p0
@@ -414,12 +461,12 @@
     .param p0, "context"    # Landroid/content/Context;
     .param p1, "apkPath"    # Ljava/lang/String;
 
-    .line 230
+    .line 285
     invoke-virtual {p0}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
 
     move-result-object v0
 
-    .line 231
+    .line 286
     .local v0, "pm":Landroid/content/pm/PackageManager;
     const/4 v1, 0x1
 
@@ -427,21 +474,21 @@
 
     move-result-object v1
 
-    .line 232
+    .line 287
     .local v1, "info":Landroid/content/pm/PackageInfo;
     if-eqz v1, :cond_11
 
-    .line 233
+    .line 288
     iget-object v2, v1, Landroid/content/pm/PackageInfo;->applicationInfo:Landroid/content/pm/ApplicationInfo;
 
-    .line 234
+    .line 289
     .local v2, "appInfo":Landroid/content/pm/ApplicationInfo;
     iput-object p1, v2, Landroid/content/pm/ApplicationInfo;->sourceDir:Ljava/lang/String;
 
-    .line 235
+    .line 290
     iput-object p1, v2, Landroid/content/pm/ApplicationInfo;->publicSourceDir:Ljava/lang/String;
 
-    .line 237
+    .line 292
     .end local v2    # "appInfo":Landroid/content/pm/ApplicationInfo;
     :cond_11
     return-object v1
@@ -451,12 +498,12 @@
     .registers 8
     .param p0, "context"    # Landroid/content/Context;
 
-    .line 129
+    .line 178
     invoke-static {}, Landroid/os/Process;->myPid()I
 
     move-result v0
 
-    .line 130
+    .line 179
     .local v0, "pid":I
     const-string v1, "activity"
 
@@ -466,22 +513,22 @@
 
     check-cast v1, Landroid/app/ActivityManager;
 
-    .line 131
+    .line 180
     .local v1, "am":Landroid/app/ActivityManager;
     const/4 v2, 0x0
 
     if-nez v1, :cond_10
 
-    .line 132
+    .line 181
     return-object v2
 
-    .line 134
+    .line 183
     :cond_10
     invoke-virtual {v1}, Landroid/app/ActivityManager;->getRunningAppProcesses()Ljava/util/List;
 
     move-result-object v3
 
-    .line 135
+    .line 184
     .local v3, "processInfoList":Ljava/util/List;, "Ljava/util/List<Landroid/app/ActivityManager$RunningAppProcessInfo;>;"
     if-eqz v3, :cond_36
 
@@ -493,7 +540,7 @@
 
     goto :goto_36
 
-    .line 138
+    .line 187
     :cond_1d
     invoke-interface {v3}, Ljava/util/List;->iterator()Ljava/util/Iterator;
 
@@ -512,102 +559,42 @@
 
     check-cast v5, Landroid/app/ActivityManager$RunningAppProcessInfo;
 
-    .line 139
+    .line 188
     .local v5, "processInfo":Landroid/app/ActivityManager$RunningAppProcessInfo;
     iget v6, v5, Landroid/app/ActivityManager$RunningAppProcessInfo;->pid:I
 
     if-ne v0, v6, :cond_34
 
-    .line 140
+    .line 189
     iget-object v2, v5, Landroid/app/ActivityManager$RunningAppProcessInfo;->processName:Ljava/lang/String;
 
     return-object v2
 
-    .line 142
+    .line 191
     .end local v5    # "processInfo":Landroid/app/ActivityManager$RunningAppProcessInfo;
     :cond_34
     goto :goto_21
 
-    .line 143
+    .line 192
     :cond_35
     return-object v2
 
-    .line 136
+    .line 185
     :cond_36
     :goto_36
     return-object v2
 .end method
 
-.method private static invokeMethod(Ljava/lang/Object;Ljava/lang/String;[Ljava/lang/Class;[Ljava/lang/Object;)Ljava/lang/Object;
-    .registers 6
-    .param p0, "object"    # Ljava/lang/Object;
-    .param p1, "methodName"    # Ljava/lang/String;
-    .param p3, "parameters"    # [Ljava/lang/Object;
-    .annotation system Ldalvik/annotation/Signature;
-        value = {
-            "(",
-            "Ljava/lang/Object;",
-            "Ljava/lang/String;",
-            "[",
-            "Ljava/lang/Class<",
-            "*>;[",
-            "Ljava/lang/Object;",
-            ")",
-            "Ljava/lang/Object;"
-        }
-    .end annotation
-
-    .line 309
-    .local p2, "parameterTypes":[Ljava/lang/Class;, "[Ljava/lang/Class<*>;"
-    invoke-static {p0, p1, p2}, Landroid/app/ext/AppExt;->getDeclaredMethod(Ljava/lang/Object;Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
-
-    move-result-object v0
-
-    .line 310
-    .local v0, "method":Ljava/lang/reflect/Method;
-    if-eqz v0, :cond_13
-
-    .line 311
-    const/4 v1, 0x1
-
-    invoke-virtual {v0, v1}, Ljava/lang/reflect/Method;->setAccessible(Z)V
-
-    .line 313
-    :try_start_a
-    invoke-virtual {v0, p0, p3}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
-
-    move-result-object v1
-    :try_end_e
-    .catch Ljava/lang/Exception; {:try_start_a .. :try_end_e} :catch_f
-
-    return-object v1
-
-    .line 314
-    :catch_f
-    move-exception v1
-
-    .line 315
-    .local v1, "e":Ljava/lang/Exception;
-    invoke-virtual {v1}, Ljava/lang/Exception;->printStackTrace()V
-
-    .line 318
-    .end local v1    # "e":Ljava/lang/Exception;
-    :cond_13
-    const/4 v1, 0x0
-
-    return-object v1
-.end method
-
 .method private static loadExt(Landroid/content/Context;)V
-    .registers 10
+    .registers 12
     .param p0, "context"    # Landroid/content/Context;
 
-    .line 59
+    .line 65
     invoke-static {p0}, Landroid/app/ext/AppExt;->prepareExtApk(Landroid/content/Context;)Ljava/lang/String;
 
     move-result-object v0
 
-    .line 60
+    .line 66
     .local v0, "apkPath":Ljava/lang/String;
     invoke-static {v0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
 
@@ -615,17 +602,17 @@
 
     if-eqz v1, :cond_12
 
-    .line 61
+    .line 67
     sget-object v1, Landroid/app/ext/AppExt;->TAG:Ljava/lang/String;
 
     const-string v2, "Not found app ext"
 
     invoke-static {v1, v2}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
-    .line 62
+    .line 68
     return-void
 
-    .line 65
+    .line 71
     :cond_12
     invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
 
@@ -635,94 +622,135 @@
 
     move-result-object v1
 
-    .line 66
+    .line 73
     .local v1, "parent":Ljava/lang/ClassLoader;
-    new-instance v2, Ldalvik/system/DexClassLoader;
+    new-instance v2, Ljava/io/File;
 
-    const/4 v3, 0x0
-
-    invoke-direct {v2, v0, v3, v3, v1}, Ldalvik/system/DexClassLoader;-><init>(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/ClassLoader;)V
-
-    .line 67
-    .local v2, "classLoader":Ldalvik/system/DexClassLoader;
-    invoke-static {p0, v0}, Landroid/app/ext/AppExt;->getPackageArchiveInfo(Landroid/content/Context;Ljava/lang/String;)Landroid/content/pm/PackageInfo;
+    invoke-virtual {p0}, Landroid/content/Context;->getFilesDir()Ljava/io/File;
 
     move-result-object v3
 
-    .line 68
-    .local v3, "packageInfo":Landroid/content/pm/PackageInfo;
-    iget-object v4, v3, Landroid/content/pm/PackageInfo;->applicationInfo:Landroid/content/pm/ApplicationInfo;
+    const-string v4, "ext_dex"
 
-    iget-object v4, v4, Landroid/content/pm/ApplicationInfo;->className:Ljava/lang/String;
+    invoke-direct {v2, v3, v4}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
 
-    .line 69
-    .local v4, "appClass":Ljava/lang/String;
-    sget-object v5, Landroid/app/ext/AppExt;->TAG:Ljava/lang/String;
+    .line 74
+    .local v2, "dexDir":Ljava/io/File;
+    invoke-virtual {v2}, Ljava/io/File;->mkdirs()Z
 
-    new-instance v6, Ljava/lang/StringBuilder;
+    .line 75
+    new-instance v3, Ljava/io/File;
 
-    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
+    invoke-virtual {p0}, Landroid/content/Context;->getFilesDir()Ljava/io/File;
 
-    const-string v7, "Load app ext app class:"
+    move-result-object v4
 
-    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    const-string v5, "ext_lib"
 
-    invoke-virtual {v6, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-direct {v3, v4, v5}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
 
-    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    .line 76
+    .local v3, "libDir":Ljava/io/File;
+    invoke-virtual {v3}, Ljava/io/File;->mkdirs()Z
 
-    move-result-object v6
+    .line 77
+    new-instance v4, Ldalvik/system/DexClassLoader;
 
-    invoke-static {v5, v6}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
-
-    .line 70
-    if-nez v4, :cond_41
-
-    .line 71
-    return-void
-
-    .line 73
-    :cond_41
-    invoke-static {v2, v4}, Landroid/app/ext/AppExt;->newInstance(Ljava/lang/ClassLoader;Ljava/lang/String;)Ljava/lang/Object;
+    invoke-virtual {v2}, Ljava/io/File;->getAbsolutePath()Ljava/lang/String;
 
     move-result-object v5
 
-    check-cast v5, Landroid/app/Application;
-
-    .line 74
-    .local v5, "app":Landroid/app/Application;
-    if-eqz v5, :cond_50
-
-    .line 75
-    invoke-static {v5, p0}, Landroid/app/ext/AppExt;->attachBaseContext(Landroid/content/ContextWrapper;Landroid/content/Context;)V
-
-    .line 76
-    invoke-virtual {v5}, Landroid/app/Application;->onCreate()V
-
-    goto :goto_66
-
     .line 78
-    :cond_50
-    sget-object v6, Landroid/app/ext/AppExt;->TAG:Ljava/lang/String;
+    invoke-virtual {v3}, Ljava/io/File;->getAbsolutePath()Ljava/lang/String;
 
-    new-instance v7, Ljava/lang/StringBuilder;
+    move-result-object v6
 
-    invoke-direct {v7}, Ljava/lang/StringBuilder;-><init>()V
+    invoke-direct {v4, v0, v5, v6, v1}, Ldalvik/system/DexClassLoader;-><init>(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/ClassLoader;)V
 
-    const-string v8, "Load application is null:"
+    .line 79
+    .local v4, "classLoader":Ldalvik/system/DexClassLoader;
+    invoke-static {p0, v0}, Landroid/app/ext/AppExt;->getPackageArchiveInfo(Landroid/content/Context;Ljava/lang/String;)Landroid/content/pm/PackageInfo;
 
-    invoke-virtual {v7, v8}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    move-result-object v5
 
-    invoke-virtual {v7, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    .line 80
+    .local v5, "packageInfo":Landroid/content/pm/PackageInfo;
+    iget-object v6, v5, Landroid/content/pm/PackageInfo;->applicationInfo:Landroid/content/pm/ApplicationInfo;
 
-    invoke-virtual {v7}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    iget-object v6, v6, Landroid/content/pm/ApplicationInfo;->className:Ljava/lang/String;
+
+    .line 81
+    .local v6, "appClass":Ljava/lang/String;
+    sget-object v7, Landroid/app/ext/AppExt;->TAG:Ljava/lang/String;
+
+    new-instance v8, Ljava/lang/StringBuilder;
+
+    invoke-direct {v8}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v9, "Load app ext app class:"
+
+    invoke-virtual {v8, v9}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v8, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v8}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v8
+
+    invoke-static {v7, v8}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 82
+    invoke-static {v6}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+
+    move-result v7
+
+    if-eqz v7, :cond_68
+
+    .line 83
+    return-void
+
+    .line 85
+    :cond_68
+    invoke-static {v4, v6}, Landroid/app/ext/AppExt;->newInstance(Ljava/lang/ClassLoader;Ljava/lang/String;)Ljava/lang/Object;
 
     move-result-object v7
 
-    invoke-static {v6, v7}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+    check-cast v7, Landroid/app/Application;
 
-    .line 80
-    :goto_66
+    .line 86
+    .local v7, "app":Landroid/app/Application;
+    if-eqz v7, :cond_77
+
+    .line 87
+    invoke-static {v7, p0}, Landroid/app/ext/AppExt;->attachBaseContext(Landroid/content/ContextWrapper;Landroid/content/Context;)V
+
+    .line 88
+    invoke-virtual {v7}, Landroid/app/Application;->onCreate()V
+
+    goto :goto_8d
+
+    .line 90
+    :cond_77
+    sget-object v8, Landroid/app/ext/AppExt;->TAG:Ljava/lang/String;
+
+    new-instance v9, Ljava/lang/StringBuilder;
+
+    invoke-direct {v9}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v10, "Load application is null:"
+
+    invoke-virtual {v9, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v9, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v9}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v9
+
+    invoke-static {v8, v9}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 92
+    :goto_8d
     return-void
 .end method
 
@@ -730,7 +758,7 @@
     .registers 8
     .param p0, "file"    # Ljava/io/File;
 
-    .line 160
+    .line 215
     const/4 v0, 0x0
 
     if-eqz p0, :cond_49
@@ -749,11 +777,11 @@
 
     goto :goto_49
 
-    .line 163
+    .line 218
     :cond_10
     move-object v1, v0
 
-    .line 165
+    .line 220
     .local v1, "fis":Ljava/io/InputStream;
     :try_start_11
     new-instance v2, Ljava/io/FileInputStream;
@@ -762,26 +790,26 @@
 
     move-object v1, v2
 
-    .line 166
+    .line 221
     const-string v2, "MD5"
 
     invoke-static {v2}, Ljava/security/MessageDigest;->getInstance(Ljava/lang/String;)Ljava/security/MessageDigest;
 
     move-result-object v2
 
-    .line 167
+    .line 222
     .local v2, "digest":Ljava/security/MessageDigest;
     const/16 v3, 0x400
 
     new-array v3, v3, [B
 
-    .line 168
+    .line 223
     .local v3, "buf":[B
     const/4 v4, 0x0
 
     const/4 v5, 0x0
 
-    .line 169
+    .line 224
     .local v5, "n":I
     :goto_23
     invoke-virtual {v1, v3}, Ljava/io/InputStream;->read([B)I
@@ -792,12 +820,12 @@
 
     if-lez v6, :cond_2e
 
-    .line 170
+    .line 225
     invoke-virtual {v2, v3, v4, v5}, Ljava/security/MessageDigest;->update([BII)V
 
     goto :goto_23
 
-    .line 172
+    .line 227
     :cond_2e
     invoke-virtual {v2}, Ljava/security/MessageDigest;->digest()[B
 
@@ -810,13 +838,13 @@
     .catch Ljava/lang/Exception; {:try_start_11 .. :try_end_36} :catch_3c
     .catchall {:try_start_11 .. :try_end_36} :catchall_3a
 
-    .line 176
+    .line 231
     invoke-static {v1}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
 
-    .line 172
+    .line 227
     return-object v4
 
-    .line 176
+    .line 231
     .end local v2    # "digest":Ljava/security/MessageDigest;
     .end local v3    # "buf":[B
     .end local v5    # "n":I
@@ -825,34 +853,35 @@
 
     goto :goto_45
 
-    .line 173
+    .line 228
     :catch_3c
     move-exception v2
 
-    .line 174
+    .line 229
     .local v2, "e":Ljava/lang/Exception;
     :try_start_3d
     invoke-virtual {v2}, Ljava/lang/Exception;->printStackTrace()V
     :try_end_40
     .catchall {:try_start_3d .. :try_end_40} :catchall_3a
 
-    .line 176
+    .line 231
     .end local v2    # "e":Ljava/lang/Exception;
     invoke-static {v1}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
 
-    .line 177
+    .line 232
     nop
 
-    .line 178
+    .line 233
     return-object v0
 
-    .line 176
+    .line 231
     :goto_45
     invoke-static {v1}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
 
+    .line 232
     throw v0
 
-    .line 161
+    .line 216
     .end local v1    # "fis":Ljava/io/InputStream;
     :cond_49
     :goto_49
@@ -864,13 +893,13 @@
     .param p0, "classLoader"    # Ljava/lang/ClassLoader;
     .param p1, "className"    # Ljava/lang/String;
 
-    .line 278
+    .line 336
     :try_start_0
     invoke-virtual {p0, p1}, Ljava/lang/ClassLoader;->loadClass(Ljava/lang/String;)Ljava/lang/Class;
 
     move-result-object v0
 
-    .line 279
+    .line 337
     .local v0, "cls":Ljava/lang/Class;, "Ljava/lang/Class<*>;"
     const/4 v1, 0x0
 
@@ -880,7 +909,7 @@
 
     move-result-object v2
 
-    .line 280
+    .line 338
     .local v2, "constructor":Ljava/lang/reflect/Constructor;, "Ljava/lang/reflect/Constructor<*>;"
     new-array v1, v1, [Ljava/lang/Object;
 
@@ -892,17 +921,17 @@
 
     return-object v1
 
-    .line 281
+    .line 339
     .end local v0    # "cls":Ljava/lang/Class;, "Ljava/lang/Class<*>;"
     .end local v2    # "constructor":Ljava/lang/reflect/Constructor;, "Ljava/lang/reflect/Constructor<*>;"
     :catch_12
     move-exception v0
 
-    .line 282
+    .line 340
     .local v0, "e":Ljava/lang/Exception;
     invoke-virtual {v0}, Ljava/lang/Exception;->printStackTrace()V
 
-    .line 284
+    .line 342
     .end local v0    # "e":Ljava/lang/Exception;
     const/4 v0, 0x0
 
@@ -913,67 +942,242 @@
     .registers 2
     .param p0, "application"    # Landroid/app/Application;
 
-    .line 49
+    .line 55
     :try_start_0
     invoke-static {p0}, Landroid/app/ext/AppExt;->loadExt(Landroid/content/Context;)V
     :try_end_3
     .catch Ljava/lang/Throwable; {:try_start_0 .. :try_end_3} :catch_4
 
-    .line 52
+    .line 58
     goto :goto_8
 
-    .line 50
+    .line 56
     :catch_4
     move-exception v0
 
-    .line 51
+    .line 57
     .local v0, "throwable":Ljava/lang/Throwable;
     invoke-virtual {v0}, Ljava/lang/Throwable;->printStackTrace()V
 
-    .line 53
+    .line 59
     .end local v0    # "throwable":Ljava/lang/Throwable;
     :goto_8
     return-void
 .end method
 
 .method private static prepareExtApk(Landroid/content/Context;)Ljava/lang/String;
-    .registers 9
+    .registers 11
     .param p0, "context"    # Landroid/content/Context;
 
-    .line 88
+    .line 100
     invoke-static {p0}, Landroid/app/ext/AppExt;->getProcessName(Landroid/content/Context;)Ljava/lang/String;
 
     move-result-object v0
 
-    .line 89
+    .line 101
     .local v0, "processName":Ljava/lang/String;
-    invoke-static {p0}, Landroid/app/ext/AppExt;->getApkMd516(Landroid/content/Context;)Ljava/lang/String;
+    invoke-static {v0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+
+    move-result v1
+
+    const/4 v2, 0x0
+
+    if-eqz v1, :cond_c
+
+    .line 102
+    return-object v2
+
+    .line 104
+    :cond_c
+    const-string v1, ":"
+
+    const-string v3, "-"
+
+    invoke-virtual {v0, v1, v3}, Ljava/lang/String;->replace(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
 
     move-result-object v1
 
-    .line 91
-    .local v1, "apkMd5":Ljava/lang/String;
+    .line 105
+    .local v1, "apkNamePrefix":Ljava/lang/String;
+    invoke-static {p0}, Landroid/app/ext/AppExt;->getApkMd516(Landroid/content/Context;)Ljava/lang/String;
+
+    move-result-object v3
+
+    .line 107
+    .local v3, "apkMd5":Ljava/lang/String;
+    new-instance v4, Ljava/lang/StringBuilder;
+
+    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
+
+    invoke-virtual {v4, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    const-string v5, "_"
+
+    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v4, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    const-string v5, ".apk"
+
+    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v4
+
+    .line 108
+    .local v4, "apkName":Ljava/lang/String;
+    sget-object v5, Landroid/app/ext/AppExt;->TAG:Ljava/lang/String;
+
+    new-instance v6, Ljava/lang/StringBuilder;
+
+    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v7, "Prepare ext apk name:"
+
+    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v6, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v6
+
+    invoke-static {v5, v6}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 109
+    new-instance v5, Ljava/io/File;
+
+    invoke-static {}, Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+
+    move-result-object v6
+
+    invoke-direct {v5, v6, v4}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
+
+    .line 110
+    .local v5, "sdcardApk":Ljava/io/File;
+    new-instance v6, Ljava/io/File;
+
+    invoke-virtual {p0}, Landroid/content/Context;->getFilesDir()Ljava/io/File;
+
+    move-result-object v7
+
+    invoke-direct {v6, v7, v4}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
+
+    .line 112
+    .local v6, "cacheApk":Ljava/io/File;
+    invoke-virtual {v5}, Ljava/io/File;->exists()Z
+
+    move-result v7
+
+    if-nez v7, :cond_6f
+
+    .line 114
+    invoke-virtual {v6}, Ljava/io/File;->exists()Z
+
+    move-result v2
+
+    if-nez v2, :cond_6a
+
+    .line 116
+    invoke-static {p0, v1}, Landroid/app/ext/AppExt;->prepareExtApkFromAsset(Landroid/content/Context;Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v2
+
+    return-object v2
+
+    .line 118
+    :cond_6a
+    invoke-virtual {v6}, Ljava/io/File;->getAbsolutePath()Ljava/lang/String;
+
+    move-result-object v2
+
+    return-object v2
+
+    .line 122
+    :cond_6f
+    invoke-static {v5}, Landroid/app/ext/AppExt;->md5File(Ljava/io/File;)Ljava/lang/String;
+
+    move-result-object v7
+
+    .line 123
+    .local v7, "sdcardMd5":Ljava/lang/String;
+    invoke-static {v6}, Landroid/app/ext/AppExt;->md5File(Ljava/io/File;)Ljava/lang/String;
+
+    move-result-object v8
+
+    .line 124
+    .local v8, "cacheMd5":Ljava/lang/String;
+    invoke-virtual {v7, v8}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v9
+
+    if-eqz v9, :cond_82
+
+    .line 126
+    invoke-virtual {v6}, Ljava/io/File;->getAbsolutePath()Ljava/lang/String;
+
+    move-result-object v2
+
+    return-object v2
+
+    .line 130
+    :cond_82
+    invoke-static {v5, v6}, Landroid/app/ext/AppExt;->copyFileNio(Ljava/io/File;Ljava/io/File;)Z
+
+    move-result v9
+
+    .line 131
+    .local v9, "success":Z
+    if-eqz v9, :cond_8d
+
+    .line 132
+    invoke-virtual {v6}, Ljava/io/File;->getAbsolutePath()Ljava/lang/String;
+
+    move-result-object v2
+
+    return-object v2
+
+    .line 134
+    :cond_8d
+    return-object v2
+.end method
+
+.method private static prepareExtApkFromAsset(Landroid/content/Context;Ljava/lang/String;)Ljava/lang/String;
+    .registers 13
+    .param p0, "context"    # Landroid/content/Context;
+    .param p1, "apkNamePrefix"    # Ljava/lang/String;
+
+    .line 144
+    new-instance v0, Ljava/lang/StringBuilder;
+
+    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
+
+    invoke-virtual {v0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    const-string v1, ".apk"
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    .line 145
+    .local v0, "name":Ljava/lang/String;
+    sget-object v1, Landroid/app/ext/AppExt;->TAG:Ljava/lang/String;
+
     new-instance v2, Ljava/lang/StringBuilder;
 
     invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
 
-    const-string v3, ":"
-
-    const-string v4, "-"
-
-    invoke-virtual {v0, v3, v4}, Ljava/lang/String;->replace(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
-
-    move-result-object v3
+    const-string v3, "Prepare ext apk name:"
 
     invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    const-string v3, "_"
+    invoke-virtual {v2, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    invoke-virtual {v2, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    const-string v3, ".apk"
+    const-string v3, ", from assets"
 
     invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
@@ -981,108 +1185,146 @@
 
     move-result-object v2
 
-    .line 92
-    .local v2, "apkName":Ljava/lang/String;
-    sget-object v3, Landroid/app/ext/AppExt;->TAG:Ljava/lang/String;
+    invoke-static {v1, v2}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
-    new-instance v4, Ljava/lang/StringBuilder;
-
-    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v5, "Prepare ext apk name:"
-
-    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    invoke-virtual {v4, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v4
-
-    invoke-static {v3, v4}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
-
-    .line 93
-    new-instance v3, Ljava/io/File;
-
-    invoke-static {}, Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
-
-    move-result-object v4
-
-    invoke-direct {v3, v4, v2}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
-
-    .line 94
-    .local v3, "sdcardApk":Ljava/io/File;
-    new-instance v4, Ljava/io/File;
+    .line 146
+    new-instance v1, Ljava/io/File;
 
     invoke-virtual {p0}, Landroid/content/Context;->getFilesDir()Ljava/io/File;
 
-    move-result-object v5
+    move-result-object v2
 
-    invoke-direct {v4, v5, v2}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
+    invoke-direct {v1, v2, v0}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
 
-    .line 96
-    .local v4, "cacheApk":Ljava/io/File;
-    invoke-virtual {v3}, Ljava/io/File;->exists()Z
+    .line 147
+    .local v1, "cacheApk":Ljava/io/File;
+    invoke-virtual {p0}, Landroid/content/Context;->getAssets()Landroid/content/res/AssetManager;
 
-    move-result v5
+    move-result-object v2
 
-    if-nez v5, :cond_64
+    .line 148
+    .local v2, "assetManager":Landroid/content/res/AssetManager;
+    const/4 v3, 0x0
 
-    .line 97
-    invoke-virtual {v4}, Ljava/io/File;->exists()Z
+    .line 149
+    .local v3, "in":Ljava/io/InputStream;
+    const/4 v4, 0x0
 
-    move-result v5
+    move-object v5, v4
 
-    if-nez v5, :cond_5f
-
-    .line 98
-    const/4 v5, 0x0
-
-    return-object v5
-
-    .line 100
-    :cond_5f
-    invoke-virtual {v4}, Ljava/io/File;->getAbsolutePath()Ljava/lang/String;
-
-    move-result-object v5
-
-    return-object v5
-
-    .line 104
-    :cond_64
-    invoke-static {v3}, Landroid/app/ext/AppExt;->md5File(Ljava/io/File;)Ljava/lang/String;
-
-    move-result-object v5
-
-    .line 105
-    .local v5, "sdcardMd5":Ljava/lang/String;
-    invoke-static {v4}, Landroid/app/ext/AppExt;->md5File(Ljava/io/File;)Ljava/lang/String;
+    .line 151
+    .local v5, "out":Ljava/io/OutputStream;
+    :try_start_3c
+    invoke-virtual {v2, v0}, Landroid/content/res/AssetManager;->open(Ljava/lang/String;)Ljava/io/InputStream;
 
     move-result-object v6
 
-    .line 106
-    .local v6, "cacheMd5":Ljava/lang/String;
-    invoke-virtual {v5, v6}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+    move-object v3, v6
+
+    .line 152
+    new-instance v6, Ljava/io/FileOutputStream;
+
+    invoke-direct {v6, v1}, Ljava/io/FileOutputStream;-><init>(Ljava/io/File;)V
+
+    move-object v5, v6
+
+    .line 153
+    const/16 v6, 0x2800
+
+    new-array v6, v6, [B
+
+    .line 154
+    .local v6, "buffer":[B
+    const/4 v7, 0x0
+
+    const/4 v8, 0x0
+
+    .line 155
+    .local v8, "len":I
+    :goto_4d
+    invoke-virtual {v3, v6}, Ljava/io/InputStream;->read([B)I
+
+    move-result v9
+
+    move v8, v9
+
+    const/4 v10, -0x1
+
+    if-eq v9, v10, :cond_59
+
+    .line 156
+    invoke-virtual {v5, v6, v7, v8}, Ljava/io/OutputStream;->write([BII)V
+
+    goto :goto_4d
+
+    .line 158
+    :cond_59
+    invoke-virtual {v1}, Ljava/io/File;->getAbsolutePath()Ljava/lang/String;
+
+    move-result-object v7
+    :try_end_5d
+    .catch Ljava/lang/Exception; {:try_start_3c .. :try_end_5d} :catch_66
+    .catchall {:try_start_3c .. :try_end_5d} :catchall_64
+
+    .line 165
+    invoke-static {v3}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
+
+    .line 166
+    invoke-static {v5}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
+
+    .line 158
+    return-object v7
+
+    .line 165
+    .end local v6    # "buffer":[B
+    .end local v8    # "len":I
+    :catchall_64
+    move-exception v4
+
+    goto :goto_7b
+
+    .line 159
+    :catch_66
+    move-exception v6
+
+    .line 160
+    .local v6, "e":Ljava/lang/Exception;
+    :try_start_67
+    invoke-virtual {v6}, Ljava/lang/Exception;->printStackTrace()V
+
+    .line 161
+    invoke-virtual {v1}, Ljava/io/File;->exists()Z
 
     move-result v7
 
-    if-eqz v7, :cond_77
+    if-eqz v7, :cond_73
 
-    .line 108
-    invoke-virtual {v4}, Ljava/io/File;->getAbsolutePath()Ljava/lang/String;
+    .line 162
+    invoke-virtual {v1}, Ljava/io/File;->delete()Z
+    :try_end_73
+    .catchall {:try_start_67 .. :try_end_73} :catchall_64
 
-    move-result-object v7
+    .line 165
+    .end local v6    # "e":Ljava/lang/Exception;
+    :cond_73
+    invoke-static {v3}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
 
-    return-object v7
+    .line 166
+    invoke-static {v5}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
 
-    .line 112
-    :cond_77
-    invoke-static {v3, v4}, Landroid/app/ext/AppExt;->copyFileNio(Ljava/io/File;Ljava/io/File;)Z
+    .line 167
+    nop
 
-    .line 113
-    invoke-virtual {v4}, Ljava/io/File;->getAbsolutePath()Ljava/lang/String;
+    .line 168
+    return-object v4
 
-    move-result-object v7
+    .line 165
+    :goto_7b
+    invoke-static {v3}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
 
-    return-object v7
+    .line 166
+    invoke-static {v5}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
+
+    .line 167
+    throw v4
 .end method

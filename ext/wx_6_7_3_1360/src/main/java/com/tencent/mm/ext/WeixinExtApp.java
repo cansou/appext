@@ -34,8 +34,13 @@ public class WeixinExtApp extends Application {
             return;
         }
 
+        if (ActivityCallback.isRegisterCallback(app)) {
+            return;
+        }
+
         sContext = app;
-        unzipPatch(app);
+        // TODO 如果是系统注入，则需要开启以下代码, 反编译形式已直接注入到smali,而不需要采用热修复方案
+//        unzipPatch(app);
         app.registerActivityLifecycleCallbacks(new ActivityCallback());
 
         ActivityCallback.register(LauncherUI.ACTIVITY_NAME, new LauncherUI());
@@ -52,18 +57,17 @@ public class WeixinExtApp extends Application {
         File outFile = new File(context.getFilesDir(), "db.dex");
         ZipUtils.unzipChild(extApk, dexName, outFile);
 
-        File extDir = new File(context.getFilesDir(), "ext");
-        extApk.mkdirs();
+        File dexDir = new File(context.getFilesDir(), "ext_app_dex");
+        dexDir.mkdirs();
 
-        try {
-            DexUtils.injectDexAtFirst(context, outFile.getAbsolutePath(), extDir.getAbsolutePath());
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        File libDir = new File(context.getFilesDir(), "ext_app_lib");
+        libDir.mkdirs();
+
+        String dexPath = outFile.getAbsolutePath();
+        String optimizedDirectory = dexDir.getAbsolutePath();
+        String librarySearchPath = libDir.getAbsolutePath();
+        DexUtils.injectDexAtFirst(context, dexPath, optimizedDirectory, librarySearchPath);
     }
+
 
 }
