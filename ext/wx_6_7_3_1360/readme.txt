@@ -1,6 +1,5 @@
-
-编译出apk
-sh ext/wx_6_7_3_1360/build_assemble_apk.sh
+编译出wx apk
+sh ext/wx_6_7_3_1360/build_assemble_apk.sh com.tencent.mm_vc1360_vn6.7.3.apk
 
 # 编译出插件apk
 sh ext/wx_6_7_3_1360/build.sh
