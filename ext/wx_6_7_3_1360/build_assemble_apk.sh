@@ -21,7 +21,7 @@ if [ -z "${wx_apk}" ]; then
     exit 0
 fi
 
-# 将plugin apk放在 assets目录中
+# 先编译出apk, 将plugin apk放在 assets目录中
 ./gradlew ext:${module_name}:clean
 ./gradlew ext:${module_name}:assembleDebug
 output_plugin_apk=${gradle_work}/ext/${module_name}/build/outputs/apk/debug/${module_name}-debug.apk
@@ -30,7 +30,7 @@ output_plugin_apk=${gradle_work}/ext/${module_name}/build/outputs/apk/debug/${mo
 
 # 临时目录
 temp_build_name=build_temp
-temp_build_dir=${gradle_work}/ext/${module_name}/${temp_build_name}
+temp_build_dir=${gradle_work}/ext/${module_name}/build/${temp_build_name}
 temp_apk=wx.apk
 
 # 清理build目录文件
@@ -75,7 +75,7 @@ smali assemble smali_src -o classes.dex
 7z d ${temp_apk} classes.dex
 7z a ${temp_apk} classes.dex
 
-# 注入插件apk
+# 将plugin apk放在 assets目录中
 rm -rf assets
 mkdir assets
 cp ${output_plugin_apk} assets/com.tencent.mm.apk
