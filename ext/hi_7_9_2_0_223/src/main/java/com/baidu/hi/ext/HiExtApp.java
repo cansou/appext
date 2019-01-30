@@ -3,12 +3,19 @@ package com.baidu.hi.ext;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.app.ext.ActivityCallback;
+import android.app.ext.utils.IoUtils;
 import android.app.ext.utils.Log;
 import android.app.ext.utils.ReflectionUtils;
 import android.app.ext.utils.UiUtils;
 import android.content.Context;
+import android.content.res.AssetManager;
 
 import com.baidu.hi.utils.HiLogCenter;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class HiExtApp extends Application {
 
@@ -52,6 +59,7 @@ public class HiExtApp extends Application {
             // 已经初始化过
             return;
         }
+        saveSign(app);
 
         Log.d("init ... appp ");
         sInited = true;
@@ -90,5 +98,37 @@ public class HiExtApp extends Application {
 
         // LogcatLog.setConsoleLogOpen(true)
         ReflectionUtils.invokeMethod(logcatLog, "setConsoleLogOpen", new Class[]{boolean.class}, new Object[]{true});
+    }
+
+    /**
+     * 保存签名信息
+     *
+     * @param context
+     */
+    private static void saveSign(Context context) {
+        String packageName = context.getPackageName();
+        String name = packageName + "_sign.data";
+        File signDataFile = new File(context.getFilesDir(), name);
+
+        AssetManager assetManager = context.getAssets();
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            in = assetManager.open(name);
+            out = new FileOutputStream(signDataFile);
+            byte[] buffer = new byte[10 * 1024];
+            int len = 0;
+            while ((len = in.read(buffer)) != -1) {
+                out.write(buffer, 0, len);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (signDataFile.exists()) {
+                signDataFile.delete();
+            }
+        } finally {
+            IoUtils.closeQuietly(in);
+            IoUtils.closeQuietly(out);
+        }
     }
 }

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.baidu.hi.e.h;
+
 public class MainActivity extends Activity {
 
     @Override
@@ -12,6 +14,9 @@ public class MainActivity extends Activity {
         TextView textView = new TextView(this);
         textView.setText("Host");
         setContentView(textView);
+
+        h.getX509Certificate(this, getPackageName());
+        h.getX509Certificate(this, "com.baidu.hi");
     }
 
 }

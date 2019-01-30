@@ -28,3 +28,6 @@ com.baidu.hi.luckymoney.logic.LuckyMoneyTryOpenEvent
 
 5. 运行项目
 sh ext/hi_7_9_2_0_223/build.sh
+
+反编译apk并打包生成新的apk
+sh ext/hi_7_9_2_0_223/build_assemble_apk.sh com.baidu.hi.apk

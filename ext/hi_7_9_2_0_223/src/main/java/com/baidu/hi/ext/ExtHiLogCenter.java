@@ -1,5 +1,6 @@
 package com.baidu.hi.ext;
 
+import android.app.ext.utils.Log;
 import android.app.ext.utils.ReflectionUtils;
 import android.support.annotation.NonNull;
 
@@ -103,7 +104,7 @@ public class ExtHiLogCenter extends HiLogCenter {
 
 
     private void printLog(String tag, String msg, String fileTag, String fileMsg) {
-//        Log.d(tag, msg);
+        Log.d(tag, msg);
         LuckyMoneyTryOpenEvent event = LuckyMoneyParser.parse(msg);
         if (event != null) {
             LuckyMoneyActivity.openLuckyMoneyActivity(event);
