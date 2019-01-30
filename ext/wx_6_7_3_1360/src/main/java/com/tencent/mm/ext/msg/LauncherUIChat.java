@@ -88,12 +88,22 @@ public class LauncherUIChat {
         sSendClickListener.onClick(sendButton);
     }
 
+    /**
+     * 查找发送按键
+     *
+     * @return
+     */
     private static View getSendButton() {
 //        return ViewUtils.findButtonByText(getChatFooter(), "发送");
 //        ViewGroup viewGroup = sActivity.findViewById(android.R.id.content);
         return ViewUtils.findViewByIdName(sActivity, "aik");
     }
 
+    /**
+     * 查找聊天输入框
+     *
+     * @return
+     */
     private static EditText getEditText() {
 //        return (EditText) ViewUtils.findViewByClassName(getChatFooter(), "com.tencent.mm.ui.widget.MMEditText");
 //        ViewGroup viewGroup = sActivity.findViewById(android.R.id.content);

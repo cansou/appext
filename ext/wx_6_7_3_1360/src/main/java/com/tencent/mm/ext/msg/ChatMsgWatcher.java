@@ -15,6 +15,11 @@ public class ChatMsgWatcher implements DbHook {
     private static final String TABLE_MESSAGE = "message";
 
     /**
+     * 是否监听文本消息
+     */
+    private static boolean ENABLE_TEXT_MSG = false;
+
+    /**
      * 监控数据库写
      *
      * @param table
@@ -29,11 +34,17 @@ public class ChatMsgWatcher implements DbHook {
                 return;
             }
             if (msgInfo.isLuckyMoney()) {
+                if (msgInfo.isSend()) {
+                    // 自己发送的不抢
+                    // return;
+                }
                 // 红包消息监听
                 LuckyInfo info = LuckyInfo.parse(msgInfo.content, msgInfo.talker);
                 LuckyMoneyReceiveUI.launchLuckyMoney(info);
             } else if (msgInfo.isTextMsg()) {
-                TextMsgWatcher.onReceiveChatMsg(msgInfo);
+                if (ENABLE_TEXT_MSG) {
+                    TextMsgWatcher.onReceiveChatMsg(msgInfo);
+                }
             }
         }
     }
