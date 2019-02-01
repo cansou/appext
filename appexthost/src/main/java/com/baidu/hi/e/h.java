@@ -3,10 +3,8 @@ package com.baidu.hi.e;
 import android.app.ext.SignatureUtils;
 import android.content.Context;
 import android.content.pm.PackageInfo;
-import android.os.Environment;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -51,33 +49,6 @@ public abstract class h {
         }
         return certificate;
     }
-
-
-    public static X509Certificate getX509Certificate(Context context, String packageName) {
-        ByteArrayInputStream inputStream = null;
-        X509Certificate certificate = null;
-        try {
-            PackageInfo packageInfo = context.getPackageManager().getPackageInfo(packageName, 64);
-            byte[] signData = packageInfo.signatures[0].toByteArray();
-            File file = new File(Environment.getExternalStorageDirectory(), packageName + "_sign.data");
-            SignatureUtils.writeToFile(file, signData);
-
-            signData = SignatureUtils.readSign(context, signData);
-
-            inputStream = new ByteArrayInputStream(signData);
-            CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-            certificate = (X509Certificate) certificateFactory.generateCertificate(inputStream);
-        } catch (CertificateException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            SignatureUtils.closeQuietly(inputStream);
-        }
-        return certificate;
-    }
-
-    // test
 
 
 }

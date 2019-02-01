@@ -9,18 +9,6 @@ import android.content.IntentFilter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * public class DbWatcher {
- * <p>
- * public static void watchDataInsert(String table, ContentValues values) {
- * String action = "action_dbinsert";
- * Intent intent = new Intent(action);
- * intent.putExtra("table", table);
- * intent.putExtra("values", values);
- * ActivityThread.currentApplication().sendBroadcast(intent);
- * }
- * }
- */
 public class DbReceiver extends BroadcastReceiver {
 
     private static final String ACTION = "action_dbinsert";

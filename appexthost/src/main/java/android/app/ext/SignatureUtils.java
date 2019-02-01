@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+ * 用于反编译apk后,处理签名验证,替换获取签名的信息
+ */
 public class SignatureUtils {
 
     /**
