@@ -1,6 +1,4 @@
-当前目录中baksmali和smali版本是 2.2b4
-baksmali-2.2b4.jar	
-smali-2.2b4.jar
+当前目录中baksmali和smali版本是 2.3.4
 
 baksmali disassemble app.apk -o app
 smali assemble app -o classes.dex
@@ -9,5 +7,6 @@ smali assemble app -o classes.dex
 
 java -jar baksmali.jar disassemble app.apk -o app
 java -jar smali.jar assemble app -o classes.dex
+
 
 

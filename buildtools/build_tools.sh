@@ -4,6 +4,7 @@
 build_tools_script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 echo "script_dir :${build_tools_script_dir}"
 
+# 工具链配置
 # 定义smali位置
 smali=${build_tools_script_dir}/baksmali/smali
 

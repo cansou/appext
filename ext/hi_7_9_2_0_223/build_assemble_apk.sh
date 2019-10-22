@@ -87,6 +87,9 @@ com_baidu_hi_e_h_smali_file=com/baidu/hi/e/h.smali
 cp ${gradle_work}/ext/${module_name}/smali_src/${com_baidu_hi_e_h_smali_file} ${smali_src_name}/${com_baidu_hi_e_h_smali_file}
 
 # 复制签名的类
+mkdir ${smali_src_name}/android
+mkdir ${smali_src_name}/android/app
+mkdir ${smali_src_name}/android/app/ext
 sign_smali_file=android/app/ext/SignatureUtils.smali
 cp ${gradle_work}/ext/${module_name}/smali_src/${sign_smali_file} ${smali_src_name}/${sign_smali_file}
 

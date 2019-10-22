@@ -329,6 +329,7 @@
     .line 322
     invoke-static {v3}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
 
+    .line 323
     throw v4
 .end method
 
@@ -877,6 +878,7 @@
     :goto_45
     invoke-static {v1}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
 
+    .line 232
     throw v0
 
     .line 216
@@ -1323,5 +1325,6 @@
     .line 166
     invoke-static {v5}, Landroid/app/ext/AppExt;->closeQuietly(Ljava/io/Closeable;)V
 
+    .line 167
     throw v4
 .end method

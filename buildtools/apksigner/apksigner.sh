@@ -44,7 +44,10 @@ cp ${unsigned_apk} ${tmp_apk}
 # zip -d ${tmp_apk} META-INF
 
 # mac平台 '*' 需要加上转义
-zip -d ${tmp_apk} META-INF/\*
+#zip -d ${tmp_apk} META-INF/\*
+zip -d ${tmp_apk} META-INF/\*RSA
+zip -d ${tmp_apk} META-INF/\*SF
+zip -d ${tmp_apk} META-INF/\*MF
 ### 删除原apk中的签名 #########
 
 echo "Signing apk..."

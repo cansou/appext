@@ -59,7 +59,9 @@ public class HiExtApp extends Application {
             // 已经初始化过
             return;
         }
-        saveSign(app);
+
+        // 非反编译的apk不需要调用此方法
+//        saveSign(app);
 
         Log.d("init ... appp ");
         sInited = true;
