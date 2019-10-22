@@ -23,15 +23,6 @@ public class LauncherUI extends ActivityLifecycleHook {
                 ex.printStackTrace();
             }
         });
-        UiUtils.post(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    LauncherUIChat.initView(activity);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        LauncherUIChat.initView(activity);
     }
 }

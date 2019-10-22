@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.agmbat.robot.RobotCenter;
+import com.tencent.mm.ext.luckymoney.send.LuckyMoneySender;
 import com.tencent.mm.ext.msg.MsgInfo;
 
 import java.util.ArrayList;
@@ -98,8 +99,11 @@ public class ChatBot {
         }
         setNeedAtMeAfter(FIVE_MINUTES);
         String msg = removeRobotName(content);
-        msg = msg.trim();
         Log.i(TAG, "receive content:" + msg);
+        if (msg.equals("发红包")) {
+            LuckyMoneySender.launchLuckyMoneyPrepareUI(msgInfo.talker, 3, "0.01", "1", "");
+            return "";
+        }
         RobotCenter robotCenter = new RobotCenter(); // 亲爱的，当天请求次数已用完。
         return robotCenter.talk(msg);
     }
@@ -111,9 +115,9 @@ public class ChatBot {
      * @return
      */
     private static String removeRobotName(String msg) {
-        for (String selfName : ROBOT_NAME_LIST) {
-            msg = msg.replace(selfName + " ", "").replace(selfName, "");
-        }
+        msg = msg.replace(AT_BOT_NICK_NAME + " ", "")
+                .replace(AT_BOT_NICK_NAME, "")
+                .replace(BOT_NICK_NAME, "").trim();
         return msg;
     }
 

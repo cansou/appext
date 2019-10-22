@@ -15,6 +15,8 @@ import com.tencent.mm.ext.luckymoney.LuckyMoneyReceiveUI;
 import com.tencent.mm.ext.luckymoney.LuckyMsgWatcher;
 import com.tencent.mm.ext.luckymoney.PageV6_7_3_1360;
 import com.tencent.mm.ext.luckymoney.PageV7_0_7_1521;
+import com.tencent.mm.ext.luckymoney.send.LuckyMoneyPrepareUI;
+import com.tencent.mm.ext.luckymoney.send.UIPageFragmentActivity;
 import com.tencent.mm.ext.msg.ChatMsgWatcher;
 
 import java.io.File;
@@ -50,6 +52,8 @@ public class WeixinExtApp extends Application {
         ActivityCallback.register(LauncherUI.ACTIVITY_NAME, new LauncherUI());
         ActivityCallback.register(PageV6_7_3_1360.ACTIVITY_NAME, new LuckyMoneyReceiveUI());
         ActivityCallback.register(PageV7_0_7_1521.ACTIVITY_NAME, new LuckyMoneyReceiveUI());
+        ActivityCallback.register(LuckyMoneyPrepareUI.ACTIVITY_NAME, new LuckyMoneyPrepareUI());
+        ActivityCallback.register(UIPageFragmentActivity.ACTIVITY_NAME, new UIPageFragmentActivity());
         // 注册数据库操作回调
         ChatMsgWatcher msgWatcher = new ChatMsgWatcher();
         msgWatcher.addMessageListener(new LuckyMsgWatcher());

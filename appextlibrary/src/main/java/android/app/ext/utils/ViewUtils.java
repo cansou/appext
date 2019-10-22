@@ -68,14 +68,32 @@ public class ViewUtils {
         return null;
     }
 
+    /**
+     * 通过类名查找View
+     */
     public static List<View> findViewByClassName(View view, String className) {
-        try {
-            Class cls = Class.forName(className);
-            return findViewByClass(view, cls);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        List<View> list = new ArrayList<>();
+        Queue<ViewGroup> groups = new LinkedList<>();
+        if (className.equals(view.getClass().getName())) {
+            list.add(view);
         }
-        return new ArrayList<>();
+        if (view instanceof ViewGroup) {
+            groups.add((ViewGroup) view);
+        }
+        while (!groups.isEmpty()) {
+            ViewGroup group = groups.poll();
+            int count = group.getChildCount();
+            for (int i = 0; i < count; i++) {
+                View v = group.getChildAt(i);
+                if (className.equals(v.getClass().getName())) {
+                    list.add(v);
+                }
+                if (v instanceof ViewGroup) {
+                    groups.add((ViewGroup) v);
+                }
+            }
+        }
+        return list;
     }
 
     public static View findViewByIdName(View view, String idName) {
@@ -102,28 +120,7 @@ public class ViewUtils {
      * @return
      */
     public static List<View> findViewByClass(View view, Class<?> cls) {
-        List<View> list = new ArrayList<>();
-        Queue<ViewGroup> groups = new LinkedList<>();
-        if (cls.isAssignableFrom(view.getClass())) {
-            list.add(view);
-        }
-        if (view instanceof ViewGroup) {
-            groups.add((ViewGroup) view);
-        }
-        while (!groups.isEmpty()) {
-            ViewGroup group = groups.poll();
-            int count = group.getChildCount();
-            for (int i = 0; i < count; i++) {
-                View v = group.getChildAt(i);
-                if (cls.isAssignableFrom(v.getClass())) {
-                    list.add(v);
-                }
-                if (v instanceof ViewGroup) {
-                    groups.add((ViewGroup) v);
-                }
-            }
-        }
-        return list;
+        return findViewByClassName(view, cls.getName());
     }
 
     /**

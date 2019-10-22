@@ -3,6 +3,8 @@ package com.tencent.mm.ext.chatbot;
 import android.view.View;
 import android.widget.EditText;
 
+import com.tencent.mm.ext.luckymoney.send.LuckyMoneySender;
+
 public class OnSendButtonClickListener implements View.OnClickListener {
 
     private EditText mEditText;
@@ -37,6 +39,10 @@ public class OnSendButtonClickListener implements View.OnClickListener {
         } else if (trimText.equalsIgnoreCase("xx")) {
             ChatBot.setEnable(false);
             editText.setText("机器人要休息了~~~");
+        } else if (trimText.equals("f")) {
+            editText.setText("");
+            LuckyMoneySender.launchLuckyMoneyPrepareUI("", 3, "0.01", "1", "");
+            return;
         }
         onOriginalClick(button);
     }
