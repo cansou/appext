@@ -14,3 +14,12 @@ adb pull /sdcard/window_dump.xml
 
 ###1. 通过Log查看加载的apk文件 
 AppExt: Prepare ext apk name:pkgname_a089c7262e857dfb.apk
+
+Android 10 需要打开允许在其他窗口之上显示, 否则后台无法启动Activity
+###功能list
+
+1. 自动抢红包
+2. 聊天机器人
+3. 自动发红包
+4. TODO 设置界面
+5. TODO 自动发早报

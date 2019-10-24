@@ -68,7 +68,8 @@ public class LuckyMoneySender {
      * @param taker
      * @param memberNum
      */
-    public static void launchLuckyMoneyPrepareUI(String taker, int memberNum, String total, String luckyNum, String desc) {
+    public static void launchLuckyMoneyPrepareUI(String taker, int memberNum, String total, String luckyNum,
+                                                 String desc) {
         Context context = WXRuntime.getApplicationContext();
         Intent intent = new Intent();
         intent.putExtra("pay_channel", 14);
@@ -100,6 +101,8 @@ public class LuckyMoneySender {
             if (!TextUtils.isEmpty(sTempPayPassword)) {
                 // 保存发送过的密码
                 sPayPassword = sTempPayPassword;
+                // 清空临时密码
+                sTempPayPassword = null;
             }
         }
     }
