@@ -2,9 +2,14 @@ package com.tencent.mm.ext.luckymoney.send;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.tencent.mm.ext.WXRuntime;
+import com.tencent.mm.ext.msg.MsgInfo;
 
+/**
+ * 发红包处理类
+ */
 public class LuckyMoneySender {
 
     public static final String KEY_FORM_APPEXT = "from_appkext";
@@ -14,6 +19,48 @@ public class LuckyMoneySender {
     public static final String KEY_LUCKY_TOTAL = "key_lucky_total";
     public static final String KEY_LUCKY_NUM = "key_lucky_num";
     public static final String KEY_LUCKY_DESC = "key_lucky_desc";
+
+    /**
+     * 是否是由机器人发送的红包
+     */
+    private static boolean sIsSendByRobot = false;
+
+    /**
+     * 支付密码
+     */
+    private static String sPayPassword = "";
+    private static String sTempPayPassword = "";
+
+    /**
+     * 最近发过红包的消息
+     */
+    private static MsgInfo sSenderLuckyMsg = null;
+
+    public static String getPayPassword() {
+        return sPayPassword;
+    }
+
+    /**
+     * 临时记录一次支付密码, 用于纠错
+     *
+     * @param password
+     */
+    public static void setTempPayPassword(String password) {
+        sTempPayPassword = password;
+    }
+
+    public static void setSendByRobot(boolean value) {
+        sIsSendByRobot = value;
+    }
+
+    /**
+     * 是否为机器人发送的红包
+     *
+     * @return
+     */
+    public static boolean isSendByRobot() {
+        return sIsSendByRobot;
+    }
 
     /**
      * 发送红包
@@ -41,4 +88,19 @@ public class LuckyMoneySender {
         context.startActivity(intent);
     }
 
+    public static void setSenderLuckyMsg(MsgInfo msg) {
+        sSenderLuckyMsg = msg;
+    }
+
+    /**
+     * 尝试保存支付密码
+     */
+    public static void trySavePlayPassword() {
+        if (!sIsSendByRobot && sSenderLuckyMsg != null) {
+            if (!TextUtils.isEmpty(sTempPayPassword)) {
+                // 保存发送过的密码
+                sPayPassword = sTempPayPassword;
+            }
+        }
+    }
 }

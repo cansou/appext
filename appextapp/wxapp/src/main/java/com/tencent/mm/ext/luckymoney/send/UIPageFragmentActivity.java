@@ -4,19 +4,50 @@ import android.app.Activity;
 import android.app.ext.ActivityLifecycleHook;
 import android.app.ext.utils.UiUtils;
 import android.app.ext.utils.ViewUtils;
+import android.text.TextUtils;
 import android.view.View;
-
-import com.agmbat.utils.ReflectQuietlyUtils;
 
 import java.util.List;
 
+/**
+ * 支付页面
+ */
 public class UIPageFragmentActivity extends ActivityLifecycleHook {
 
     public static final String ACTIVITY_NAME = "com.tencent.kinda.framework.app.UIPageFragmentActivity";
 
+    private KeyboardListener mKeyboardListener;
+
     @Override
     public void onActivityResumed(Activity activity) {
         super.onActivityResumed(activity);
+        mKeyboardListener = new KeyboardListener();
+        watchKeyboardShown(activity, mKeyboardListener);
+    }
+
+    @Override
+    public void onActivityDestroyed(Activity activity) {
+        super.onActivityDestroyed(activity);
+        if (mKeyboardListener != null) {
+            if (!LuckyMoneySender.isSendByRobot()) {
+                // 如果不是机器人发红包
+                String password = mKeyboardListener.getPayPassword();
+                if (!TextUtils.isEmpty(password)) {
+                    // 临时记录支付密码
+                    LuckyMoneySender.setTempPayPassword(password);
+                }
+            }
+            mKeyboardListener = null;
+        }
+    }
+
+    /**
+     * 监听键盘是否显示
+     *
+     * @param activity
+     * @param onKeyboardShownListener
+     */
+    private void watchKeyboardShown(Activity activity, final OnKeyboardShownListener onKeyboardShownListener) {
         View content = activity.findViewById(android.R.id.content);
         String viewClassName = "com.tenpay.android.wechat.MyKeyboardWindow";
         final List<View> keyboardWindowList = ViewUtils.findViewByClassName(content, viewClassName);
@@ -27,36 +58,24 @@ public class UIPageFragmentActivity extends ActivityLifecycleHook {
             @Override
             public void run() {
                 // com.tenpay.android.wechat.MyKeyboardWindow
-                View mKeyboardWindow = findKeyboard(keyboardWindowList);
-                if (mKeyboardWindow == null) {
+                View keyboardWindow = findKeyboard(keyboardWindowList);
+                if (keyboardWindow == null) {
                     UiUtils.post(this);
                 } else {
-                    inputPassword(mKeyboardWindow);
+                    if (onKeyboardShownListener != null) {
+                        onKeyboardShownListener.onKeyboardShown(keyboardWindow);
+                    }
                 }
             }
         });
     }
 
     /**
-     * 输入密码
+     * 通过判断View显示在屏幕后有大小了，找到键盘
      *
-     * @param keyboardWindow
+     * @param keyboardWindowList
+     * @return
      */
-    private void inputPassword(View keyboardWindow) {
-        String password = "000000";
-        for (int i = 0; i < password.length(); i++) {
-            String ch = String.valueOf(password.charAt(i));
-            // mKey0 - 9, D, X
-            String fieldName = "mKey" + ch;
-            View button = (View) ReflectQuietlyUtils.getFieldValue(keyboardWindow, fieldName);
-            if (button != null) {
-                button.performClick();
-            } else {
-                return;
-            }
-        }
-    }
-
     private View findKeyboard(List<View> keyboardWindowList) {
         for (View v : keyboardWindowList) {
             if (v.getWidth() > 0 && v.getHeight() > 0) {

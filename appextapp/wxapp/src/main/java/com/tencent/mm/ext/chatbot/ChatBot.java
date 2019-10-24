@@ -25,6 +25,7 @@ public class ChatBot {
      */
     private static final long FIVE_MINUTES = 5 * 60 * 1000;
 
+    private static final boolean FORCE_NEED_AT = true;
     /**
      * 机器在微信中的名称
      */
@@ -97,7 +98,9 @@ public class ChatBot {
         if (!isTalkWithRobot(content)) {
             return null;
         }
-        setNeedAtMeAfter(FIVE_MINUTES);
+        if (!FORCE_NEED_AT) {
+            setNeedAtMeAfter(FIVE_MINUTES);
+        }
         String msg = removeRobotName(content);
         Log.i(TAG, "receive content:" + msg);
         if (msg.equals("发红包")) {
@@ -153,6 +156,5 @@ public class ChatBot {
         UiUtils.removeCallbacks(mSetNeedAtMe);
         UiUtils.runOnUiThreadDelay(mSetNeedAtMe, mills);
     }
-
 
 }

@@ -22,5 +22,5 @@ dependencies {
     compileOnly fileTree(dir: 'provided', include: ['*.jar'])
     implementation project(':appextlibrary')
     implementation "com.agmbat:jutils:1.5.5"
-    implementation "com.agmbat:api:1.0.1"
+    implementation "com.agmbat:api:1.0.9"
 }
