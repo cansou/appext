@@ -17,7 +17,7 @@ public class LuckyMsgWatcher implements MessageListener {
         if (msgInfo.isLuckyMoney()) {
             if (msgInfo.isSend()) {
                 // 如果是自己发送的红包, 则记录支付密码
-                LuckyMoneySender.setSenderLuckyMsg(msgInfo);
+                LuckyMoneySender.onSenderLuckyMsg();
             }
             if (!WXConfig.ENABLE_MYSELF_LUCKY) {
                 if (msgInfo.isSend()) {

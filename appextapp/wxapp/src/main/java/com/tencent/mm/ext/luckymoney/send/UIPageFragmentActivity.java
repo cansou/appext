@@ -2,9 +2,9 @@ package com.tencent.mm.ext.luckymoney.send;
 
 import android.app.Activity;
 import android.app.ext.ActivityLifecycleHook;
+import android.app.ext.utils.Log;
 import android.app.ext.utils.UiUtils;
 import android.app.ext.utils.ViewUtils;
-import android.text.TextUtils;
 import android.view.View;
 
 import java.util.List;
@@ -16,29 +16,11 @@ public class UIPageFragmentActivity extends ActivityLifecycleHook {
 
     public static final String ACTIVITY_NAME = "com.tencent.kinda.framework.app.UIPageFragmentActivity";
 
-    private KeyboardListener mKeyboardListener;
 
     @Override
     public void onActivityResumed(Activity activity) {
         super.onActivityResumed(activity);
-        mKeyboardListener = new KeyboardListener();
-        watchKeyboardShown(activity, mKeyboardListener);
-    }
-
-    @Override
-    public void onActivityDestroyed(Activity activity) {
-        super.onActivityDestroyed(activity);
-        if (mKeyboardListener != null) {
-            if (!LuckyMoneySender.isSendByRobot()) {
-                // 如果不是机器人发红包
-                String password = mKeyboardListener.getPayPassword();
-                if (!TextUtils.isEmpty(password)) {
-                    // 临时记录支付密码
-                    LuckyMoneySender.setTempPayPassword(password);
-                }
-            }
-            mKeyboardListener = null;
-        }
+        watchKeyboardShown(activity, new KeyboardListener());
     }
 
     /**
@@ -51,7 +33,8 @@ public class UIPageFragmentActivity extends ActivityLifecycleHook {
         View content = activity.findViewById(android.R.id.content);
         String viewClassName = "com.tenpay.android.wechat.MyKeyboardWindow";
         final List<View> keyboardWindowList = ViewUtils.findViewByClassName(content, viewClassName);
-        if (keyboardWindowList == null) {
+        if (keyboardWindowList == null || keyboardWindowList.size() == 0) {
+            Log.d("Not found com.tenpay.android.wechat.MyKeyboardWindow!");
             return;
         }
         UiUtils.post(new Runnable() {

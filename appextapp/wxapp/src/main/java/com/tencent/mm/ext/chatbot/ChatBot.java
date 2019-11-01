@@ -102,13 +102,46 @@ public class ChatBot {
             setNeedAtMeAfter(FIVE_MINUTES);
         }
         String msg = removeRobotName(content);
+
+
         Log.i(TAG, "receive content:" + msg);
         if (msg.equals("发红包")) {
-            LuckyMoneySender.launchLuckyMoneyPrepareUI(msgInfo.talker, 3, "0.01", "1", "");
+            if (TextUtils.isEmpty(LuckyMoneySender.getPayPassword())) {
+                return "需要配置支付密码!";
+            }
+            sendLuckMoney(msgInfo);
             return "";
+        } else if (msg.startsWith("发红包")) {
+            String password = msg.replace("发红包", "").trim();
+            if (password.length() == 6) {
+                if (isNumber(password)) {
+                    LuckyMoneySender.setPayPassword(password);
+                    sendLuckMoney(msgInfo);
+                    return "";
+                }
+            }
         }
         RobotCenter robotCenter = new RobotCenter(); // 亲爱的，当天请求次数已用完。
         return robotCenter.talk(msg);
+    }
+
+    public static boolean isNumber(String str) {
+        for (int i = 0; i < str.length(); i++) {
+            System.out.println(str.charAt(i));
+            if (!Character.isDigit(str.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 发送红包
+     *
+     * @param msgInfo
+     */
+    private static void sendLuckMoney(MsgInfo msgInfo) {
+        LuckyMoneySender.launchLuckyMoneyPrepareUI(msgInfo.talker, 3, "0.01", "1", "");
     }
 
     /**
@@ -156,5 +189,6 @@ public class ChatBot {
         UiUtils.removeCallbacks(mSetNeedAtMe);
         UiUtils.runOnUiThreadDelay(mSetNeedAtMe, mills);
     }
+
 
 }

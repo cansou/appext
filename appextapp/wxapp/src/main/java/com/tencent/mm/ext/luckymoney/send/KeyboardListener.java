@@ -14,30 +14,44 @@ public class KeyboardListener implements OnKeyboardShownListener {
     /**
      * 按键输入字符
      */
-    private static final String[] KEY_BOARD_KEY = new String[]{
+    public static final String[] KEY_BOARD_KEY = new String[]{
             "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "D", "X"};
 
     private StringBuilder mPasswordBuilder = new StringBuilder();
 
+    private OnInputKeyListener mOnInputKeyListener = new OnInputKeyListener() {
+        @Override
+        public void onInput(String key) {
+            if (key.equals("D")) {
+                int index = mPasswordBuilder.length() - 1;
+                if (index >= 0) {
+                    mPasswordBuilder.deleteCharAt(index);
+                }
+            } else if (key.equals("X")) {
+
+            } else {
+                mPasswordBuilder.append(key);
+            }
+            if (!LuckyMoneySender.isSendByRobot()) {
+                // 如果不是机器人发红包
+                if (mPasswordBuilder.length() == 6) {
+                    // 临时记录支付密码
+                    LuckyMoneySender.setTempPayPassword(mPasswordBuilder.toString());
+                }
+            }
+        }
+    };
+
     @Override
     public void onKeyboardShown(View keyboard) {
-        resetKeyOnClickListener(keyboard);
+        // 设置key的Listener
+        for (String key : KEY_BOARD_KEY) {
+            View keyView = getKeyView(keyboard, key);
+            resetKeyOnClickListener(keyboard, keyView);
+        }
+
         if (LuckyMoneySender.isSendByRobot()) {
             inputPassword(keyboard, LuckyMoneySender.getPayPassword());
-        }
-    }
-
-    /**
-     * 设置key的Listener
-     *
-     * @param keyboard
-     */
-    private void resetKeyOnClickListener(View keyboard) {
-        // 记录数字密码
-        for (String key : KEY_BOARD_KEY) {
-            String fieldName = "mKey" + key;
-            View button = (View) ReflectQuietlyUtils.getFieldValue(keyboard, fieldName);
-            resetKeyOnClickListener(keyboard, button);
         }
     }
 
@@ -53,12 +67,12 @@ public class KeyboardListener implements OnKeyboardShownListener {
             return;
         }
         if (!listener.getClass().getName().equals(KeyboardListener.class.getName())) {
-            key.setOnClickListener(new KeyOnClickListener(keyboard, listener, mPasswordBuilder));
+            key.setOnClickListener(new KeyClickListener(keyboard, listener, mOnInputKeyListener));
         }
     }
 
     /**
-     * 找到键自动输入支付密码
+     * 找到键盘自动输入支付密码
      *
      * @param keyboardWindow
      */
@@ -79,76 +93,25 @@ public class KeyboardListener implements OnKeyboardShownListener {
      * @param key
      */
     private void inputKey(View keyboardWindow, String key) {
-        // mKey0 - 9, D, X
-        String fieldName = "mKey" + key;
-        View keyView = (View) ReflectQuietlyUtils.getFieldValue(keyboardWindow, fieldName);
-        KeyOnClickListener listener = (KeyOnClickListener) ViewUtils.getViewOnClickListener(keyView);
+        View keyView = getKeyView(keyboardWindow, key);
+        KeyClickListener listener = (KeyClickListener) ViewUtils.getViewOnClickListener(keyView);
         if (listener != null) {
             listener.originClick(keyView);
         }
     }
 
+
     /**
-     * 获取密码
+     * 通过key获取对应的View
      *
+     * @param keyboardWindow
+     * @param key
      * @return
      */
-    public String getPayPassword() {
-        return mPasswordBuilder.toString();
+    public static View getKeyView(View keyboardWindow, String key) {
+        // mKey0 - 9, D, X
+        String fieldName = "mKey" + key;
+        return (View) ReflectQuietlyUtils.getFieldValue(keyboardWindow, fieldName);
     }
 
-    private static class KeyOnClickListener implements View.OnClickListener {
-
-        private View mKeyboard;
-
-        private View.OnClickListener mOriginListener;
-
-        private StringBuilder mBuilder;
-
-        public KeyOnClickListener(View keyboard, View.OnClickListener listener, StringBuilder builder) {
-            mKeyboard = keyboard;
-            mOriginListener = listener;
-            mBuilder = builder;
-        }
-
-        @Override
-        public void onClick(View v) {
-            String key = getInputKey(v);
-            if (TextUtils.isEmpty(key)) {
-                return;
-            }
-            if (key.equals("D")) {
-                int index = mBuilder.length() - 1;
-                if (index >= 0) {
-                    mBuilder.deleteCharAt(index);
-                }
-            } else if (key.equals("X")) {
-
-            } else {
-                mBuilder.append(key);
-            }
-            originClick(v);
-        }
-
-        /**
-         * 原始的click事件
-         *
-         * @param view
-         */
-        public void originClick(View view) {
-            mOriginListener.onClick(view);
-        }
-
-        private String getInputKey(View v) {
-            for (String key : KEY_BOARD_KEY) {
-                String fieldName = "mKey" + key;
-                View button = (View) ReflectQuietlyUtils.getFieldValue(mKeyboard, fieldName);
-                if (button == v) {
-                    return key;
-                }
-            }
-            return null;
-        }
-
-    }
 }

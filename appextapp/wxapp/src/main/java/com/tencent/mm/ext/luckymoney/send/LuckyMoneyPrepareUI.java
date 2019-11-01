@@ -48,8 +48,6 @@ public class LuckyMoneyPrepareUI extends ActivityLifecycleHook {
     public void onActivityDestroyed(Activity activity) {
         super.onActivityDestroyed(activity);
         mActivityPaused = false;
-        LuckyMoneySender.trySavePlayPassword();
-        LuckyMoneySender.setSenderLuckyMsg(null);
     }
 
     /**

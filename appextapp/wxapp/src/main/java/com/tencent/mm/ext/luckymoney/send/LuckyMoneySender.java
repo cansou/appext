@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.tencent.mm.ext.WXRuntime;
-import com.tencent.mm.ext.msg.MsgInfo;
 
 /**
  * 发红包处理类
@@ -31,13 +30,13 @@ public class LuckyMoneySender {
     private static String sPayPassword = "";
     private static String sTempPayPassword = "";
 
-    /**
-     * 最近发过红包的消息
-     */
-    private static MsgInfo sSenderLuckyMsg = null;
 
     public static String getPayPassword() {
         return sPayPassword;
+    }
+
+    public static void setPayPassword(String password) {
+        sPayPassword = password;
     }
 
     /**
@@ -89,21 +88,20 @@ public class LuckyMoneySender {
         context.startActivity(intent);
     }
 
-    public static void setSenderLuckyMsg(MsgInfo msg) {
-        sSenderLuckyMsg = msg;
-    }
-
     /**
-     * 尝试保存支付密码
+     * 本机发送红包
      */
-    public static void trySavePlayPassword() {
-        if (!sIsSendByRobot && sSenderLuckyMsg != null) {
+    public static void onSenderLuckyMsg() {
+        // 尝试保存支付密码
+        if (!sIsSendByRobot) {
             if (!TextUtils.isEmpty(sTempPayPassword)) {
                 // 保存发送过的密码
                 sPayPassword = sTempPayPassword;
-                // 清空临时密码
-                sTempPayPassword = null;
             }
         }
+        // 清空临时密码
+        sTempPayPassword = null;
     }
+
+
 }
