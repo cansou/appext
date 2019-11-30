@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 # 反编译apk, 注入代码抢红包
 
+# 开启调试, 显示输出
 set -x
 
+# 定义脚本目录
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 echo "script_dir :${script_dir}"
 
+# 通过脚本目录找到 gradle 操作的目录
 gradle_work=${script_dir}/../../..
 
 # 加载build工具
@@ -14,7 +17,7 @@ source ${gradle_work}/buildtools/build_tools.sh
 cd ${gradle_work}
 
 # 当前模块名称
-module_name=wx_7_0_7_1521
+module_name=wx_7_0_9_1560
 pkg_name=com.tencent.mm
 
 # 原始apk路径
@@ -29,7 +32,6 @@ fi
 ./gradlew appextapp:wxapp:clean
 ./gradlew appextapp:wxapp:assembleDebug
 output_plugin_apk=${gradle_work}/appextapp/wxappp/build/outputs/apk/debug/wxapp-debug.apk
-
 
 # 临时目录
 temp_build_name=build_temp
@@ -48,19 +50,16 @@ classes_dex_name=classes.dex
 # 解压apk中的classes.dex
 unzip ${temp_apk} ${classes_dex_name}
 
-
 smali_src_name=smali_src_classes
+# 反编译出classes.dex -> smali_src_classes目录
 ${baksmali} disassemble ${classes_dex_name} -o ${smali_src_name}
 
 # 修改Application.smali  ##############################################
 application_smali_file=com/tencent/mm/app/Application.smali
-#cp ${gradle_work}/ext/${module_name}/smali_src_application/${application_smali_file} ${smali_src_name}/${application_smali_file}
-
+#####cp ${gradle_work}/ext/${module_name}/smali_src_application/${application_smali_file} ${smali_src_name}/${application_smali_file}
 
 application_smali_file2=com/tencent/tinker/loader/app/TinkerApplication.smali
-cp ${gradle_work}/ext/${module_name}/smali_src_application/${application_smali_file2} ${smali_src_name}/${application_smali_file2}
-
-
+#####cp ${gradle_work}/ext/${module_name}/smali_src_application/${application_smali_file2} ${smali_src_name}/${application_smali_file2}
 
 # 修改smali文件, 在Application中注入代码, 用于app启动后有代码的执行能力
 mkdir ${smali_src_name}/android
@@ -68,15 +67,15 @@ mkdir ${smali_src_name}/android/app
 mkdir ${smali_src_name}/android/app/ext
 appext_smali_file=android/app/ext/AppExt.smali
 # 复制AppExt.smali #####################################################
-#cp ${gradle_work}/appexthost/smali_src/${appext_smali_file} ${smali_src_name}/${appext_smali_file}
+#####cp ${gradle_work}/appexthost/smali_src/${appext_smali_file} ${smali_src_name}/${appext_smali_file}
 
 # 修改SQLiteDtabase.smali ##############################################
 sqlite_db_smali=com/tencent/wcdb/database/SQLiteDatabase.smali
-cp ${gradle_work}/ext/${module_name}/smali_src/${sqlite_db_smali} ${smali_src_name}/${sqlite_db_smali}
+#####cp ${gradle_work}/ext/${module_name}/smali_src/${sqlite_db_smali} ${smali_src_name}/${sqlite_db_smali}
 
 # 添加DbWatcher.smali  ######################################################
 dbwatcher_smali=android/app/ext/DbWatcher.smali
-#cp ${gradle_work}/ext/${module_name}/smali_src/${dbwatcher_smali} ${smali_src_name}/${dbwatcher_smali}
+#####cp ${gradle_work}/ext/${module_name}/smali_src/${dbwatcher_smali} ${smali_src_name}/${dbwatcher_smali}
 
 # 重新生成classes.dex
 rm -rf ${classes_dex_name}
@@ -103,7 +102,7 @@ mkdir ${smali_src_name}/android/app
 mkdir ${smali_src_name}/android/app/ext
 appext_smali_file=android/app/ext/AppExt.smali
 # 复制AppExt.smali #####################################################
-cp ${gradle_work}/appexthost/smali_src/${appext_smali_file} ${smali_src_name}/${appext_smali_file}
+#####cp ${gradle_work}/appexthost/smali_src/${appext_smali_file} ${smali_src_name}/${appext_smali_file}
 
 # 重新生成classes.dex
 rm -rf ${classes_dex_name}
@@ -123,8 +122,8 @@ zip -m ${temp_apk} assets/${pkg_name}.apk
 # 7z a ${temp_apk} assets/${pkg_name}.apk
 
 # 重新签名apk
-${apksigner} ${temp_apk}
+#${apksigner} ${temp_apk}
 
 # 安装apk运行
-adb uninstall ${pkg_name}
-adb install -r ${pkg_name}_signed.apk
+#adb uninstall ${pkg_name}
+#adb install -r ${pkg_name}_signed.apk

@@ -17,6 +17,7 @@ public class WXRuntime {
      * 微信7.0.7版本
      */
     public static final String WX_VERSION_7_0_7_1521 = "7_0_7_1521";
+    public static final String WX_VERSION_7_0_9_1560 = "7_0_9_1560";
 
     /**
      * 是否运行在系统插件中
@@ -26,7 +27,7 @@ public class WXRuntime {
     /**
      * 微信运行的版本
      */
-    public static final String RUN_VERSION = WX_VERSION_7_0_7_1521;
+    public static final String RUN_VERSION = WX_VERSION_7_0_9_1560;
 
     /**
      * 微信Application对象

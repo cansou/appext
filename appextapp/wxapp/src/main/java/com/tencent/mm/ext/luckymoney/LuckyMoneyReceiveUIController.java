@@ -13,7 +13,9 @@ public class LuckyMoneyReceiveUIController {
     private static LuckyMoneyPageController sPageController;
 
     static {
-        if (WXRuntime.RUN_VERSION.equals(WXRuntime.WX_VERSION_7_0_7_1521)) {
+        if (WXRuntime.RUN_VERSION.equals(WXRuntime.WX_VERSION_7_0_9_1560)) {
+            sPageController = new PageV7_0_9_1560();
+        } else if (WXRuntime.RUN_VERSION.equals(WXRuntime.WX_VERSION_7_0_7_1521)) {
             sPageController = new PageV7_0_7_1521();
         } else if (WXRuntime.RUN_VERSION.equals(WXRuntime.WX_VERSION_6_7_3_1360)) {
             sPageController = new PageV6_7_3_1360();

@@ -5,9 +5,9 @@ import android.app.ext.utils.ViewUtils;
 import android.view.View;
 import android.widget.EditText;
 
-public class ChatUIV7_0_7_1521 extends AbsChatUIController {
+public class ChatUIV7_0_9_1560 extends AbsChatUIController {
 
-    public ChatUIV7_0_7_1521(Activity activity) {
+    public ChatUIV7_0_9_1560(Activity activity) {
         super(activity);
     }
 
@@ -19,7 +19,7 @@ public class ChatUIV7_0_7_1521 extends AbsChatUIController {
     protected View findSendButton() {
 //        return ViewUtils.findButtonByText(getChatFooter(), "发送");
 //        ViewGroup viewGroup = sActivity.findViewById(android.R.id.content);
-        return ViewUtils.findViewByIdName(mActivity, "aqj");
+        return ViewUtils.findViewByIdName(mActivity, "aql");
 
 
     }
@@ -27,7 +27,7 @@ public class ChatUIV7_0_7_1521 extends AbsChatUIController {
     @Override
     protected EditText findEditText() {
 //        ViewGroup viewGroup = sActivity.findViewById(android.R.id.content);
-        return (EditText) ViewUtils.findViewByIdName(mActivity, "aqc");
+        return (EditText) ViewUtils.findViewByIdName(mActivity, "aqe");
     }
 
 }

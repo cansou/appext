@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.tencent.mm.ext.settings.WXConfig;
+
 public abstract class AbsLuckyMoneyPageController implements LuckyMoneyPageController {
 
     static final String KEY_FORM_APPEXT = "from_appkext";
@@ -34,7 +36,7 @@ public abstract class AbsLuckyMoneyPageController implements LuckyMoneyPageContr
         if (isFromAppExt(activity)) {
             Button button = findOpenButton(activity);
             // 如果点击时小于300毫秒会存在点击事件丢失的情况
-            int delay = ViewUtils.random(300, 500);
+            int delay = ViewUtils.random(WXConfig.get().getGrabStart(), WXConfig.get().getGrabEnd());
             ViewUtils.performClick(button, delay);
             clearFromFlag(activity);
         }

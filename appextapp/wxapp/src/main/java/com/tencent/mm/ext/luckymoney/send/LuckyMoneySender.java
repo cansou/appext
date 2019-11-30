@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.tencent.mm.ext.WXRuntime;
+import com.tencent.mm.ext.settings.WXConfig;
 
 /**
  * 发红包处理类
@@ -24,20 +25,7 @@ public class LuckyMoneySender {
      */
     private static boolean sIsSendByRobot = false;
 
-    /**
-     * 支付密码
-     */
-    private static String sPayPassword = "";
     private static String sTempPayPassword = "";
-
-
-    public static String getPayPassword() {
-        return sPayPassword;
-    }
-
-    public static void setPayPassword(String password) {
-        sPayPassword = password;
-    }
 
     /**
      * 临时记录一次支付密码, 用于纠错
@@ -96,7 +84,7 @@ public class LuckyMoneySender {
         if (!sIsSendByRobot) {
             if (!TextUtils.isEmpty(sTempPayPassword)) {
                 // 保存发送过的密码
-                sPayPassword = sTempPayPassword;
+                WXConfig.get().setPayPassword(sTempPayPassword);
             }
         }
         // 清空临时密码

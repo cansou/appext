@@ -31,7 +31,9 @@ public class LauncherUIChat {
         if (sIChatUIController != null) {
             return;
         }
-        if (WXRuntime.RUN_VERSION.equals(WXRuntime.WX_VERSION_7_0_7_1521)) {
+        if (WXRuntime.RUN_VERSION.equals(WXRuntime.WX_VERSION_7_0_9_1560)) {
+            sIChatUIController = new ChatUIV7_0_9_1560(activity);
+        } else if (WXRuntime.RUN_VERSION.equals(WXRuntime.WX_VERSION_7_0_7_1521)) {
             sIChatUIController = new ChatUIV7_0_7_1521(activity);
         } else if (WXRuntime.RUN_VERSION.equals(WXRuntime.WX_VERSION_6_7_3_1360)) {
             sIChatUIController = new ChatUIV6_7_3_1360(activity);

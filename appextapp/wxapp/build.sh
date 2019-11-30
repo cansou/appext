@@ -11,7 +11,8 @@ source ${gradle_work}/buildtools/build_tools.sh
 
 cd ${gradle_work}
 
-version=wx_7_0_7_1521
+version=wx_7_0_9_1560
+#version=wx_7_0_7_1521
 #version=wx_6_7_3_1360
 
 pkg_name=com.tencent.mm
@@ -21,7 +22,8 @@ pkg_name=com.tencent.mm
 #${smali} assemble smali_src -o db.dex
 ####================
 
-ext_app_file=${pkg_name}_c96d9576fbabc6b1.apk
+ext_app_file=${pkg_name}_1b2708769b0d708a.apk
+#ext_app_file=${pkg_name}_c96d9576fbabc6b1.apk
 #ext_app_file=${pkg_name}_844a7871663f7f79.apk
 
 module_name=wxapp

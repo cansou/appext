@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -16,6 +17,9 @@ import com.tencent.mm.ext.R;
 public class ConfigWindow extends FloatingWindow {
 
     private CheckBox mGrabSelfBox;
+    private EditText mEditPayPassword;
+    private EditText mGrabStart;
+    private EditText mGrabEnd;
 
     public ConfigWindow(Context context) {
         super(context);
@@ -41,6 +45,30 @@ public class ConfigWindow extends FloatingWindow {
             }
         });
         mGrabSelfBox.setChecked(WXConfig.get().isEnableMySelfLucky());
+        mEditPayPassword = view.findViewById(R.id.edit_pay_password);
+        mEditPayPassword.setText(WXConfig.get().getPayPassword());
+        view.findViewById(R.id.save_pay_password).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 保存密码
+                String password = mEditPayPassword.getText().toString();
+                WXConfig.get().setPayPassword(password);
+            }
+        });
+
+        mGrabStart = view.findViewById(R.id.grab_start);
+        mGrabStart.setText(String.valueOf(WXConfig.get().getGrabStart()));
+        mGrabEnd = view.findViewById(R.id.grab_end);
+        mGrabEnd.setText(String.valueOf(WXConfig.get().getGrabEnd()));
+        view.findViewById(R.id.save_grab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String start = mGrabStart.getText().toString();
+                String end = mGrabEnd.getText().toString();
+                WXConfig.get().setGrabStart(Integer.valueOf(start));
+                WXConfig.get().setGrabEnd(Integer.valueOf(end));
+            }
+        });
 
     }
 

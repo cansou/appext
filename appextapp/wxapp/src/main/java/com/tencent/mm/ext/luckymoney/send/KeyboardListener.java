@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.agmbat.utils.ReflectQuietlyUtils;
+import com.tencent.mm.ext.settings.WXConfig;
 
 /**
  * 键盘监听
@@ -51,7 +52,7 @@ public class KeyboardListener implements OnKeyboardShownListener {
         }
 
         if (LuckyMoneySender.isSendByRobot()) {
-            inputPassword(keyboard, LuckyMoneySender.getPayPassword());
+            inputPassword(keyboard, WXConfig.get().getPayPassword());
         }
     }
 

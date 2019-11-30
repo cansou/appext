@@ -11,15 +11,16 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.tencent.mm.ext.chatbot.TextMsgWatcher;
-import com.tencent.mm.ext.settings.SettingsUI;
 import com.tencent.mm.ext.luckymoney.LuckyMoneyReceiveUI;
 import com.tencent.mm.ext.luckymoney.LuckyMsgWatcher;
 import com.tencent.mm.ext.luckymoney.PageV6_7_3_1360;
 import com.tencent.mm.ext.luckymoney.PageV7_0_7_1521;
 import com.tencent.mm.ext.luckymoney.send.LuckyMoneyPrepareUI;
+import com.tencent.mm.ext.luckymoney.send.LuckyMoneyPrepareUIV7_0_9_1560;
 import com.tencent.mm.ext.luckymoney.send.UIPageFragmentActivity;
 import com.tencent.mm.ext.luckymoney.send.WalletPayUI;
 import com.tencent.mm.ext.msg.ChatMsgWatcher;
+import com.tencent.mm.ext.settings.SettingsUI;
 
 import java.io.File;
 
@@ -56,7 +57,13 @@ public class WeixinExtApp extends Application {
         ActivityCallback.register(LauncherUI.ACTIVITY_NAME, new LauncherUI());
         ActivityCallback.register(PageV6_7_3_1360.ACTIVITY_NAME, new LuckyMoneyReceiveUI());
         ActivityCallback.register(PageV7_0_7_1521.ACTIVITY_NAME, new LuckyMoneyReceiveUI());
-        ActivityCallback.register(LuckyMoneyPrepareUI.ACTIVITY_NAME, new LuckyMoneyPrepareUI());
+        if (WXRuntime.RUN_VERSION.equals(WXRuntime.WX_VERSION_7_0_9_1560)) {
+            ActivityCallback.register(LuckyMoneyPrepareUIV7_0_9_1560.ACTIVITY_NAME,
+                    new LuckyMoneyPrepareUIV7_0_9_1560());
+        } else if (WXRuntime.RUN_VERSION.equals(WXRuntime.WX_VERSION_7_0_7_1521)) {
+            ActivityCallback.register(LuckyMoneyPrepareUI.ACTIVITY_NAME, new LuckyMoneyPrepareUI());
+        }
+
         ActivityCallback.register(UIPageFragmentActivity.ACTIVITY_NAME, new UIPageFragmentActivity());
         ActivityCallback.register(WalletPayUI.ACTIVITY_NAME, new WalletPayUI());
         ActivityCallback.register(SettingsUI.ACTIVITY_NAME, new SettingsUI());
@@ -94,7 +101,8 @@ public class WeixinExtApp extends Application {
     }
 
     private static String getDexName() {
-        if (WXRuntime.RUN_VERSION.equals(WXRuntime.WX_VERSION_7_0_7_1521)) {
+        if (WXRuntime.RUN_VERSION.equals(WXRuntime.WX_VERSION_7_0_7_1521)
+                || WXRuntime.RUN_VERSION.equals(WXRuntime.WX_VERSION_7_0_9_1560)) {
             return "db_7_0_7_1521.dex";
         } else if (WXRuntime.RUN_VERSION.equals(WXRuntime.WX_VERSION_6_7_3_1360)) {
             return "db_6_7_3_1360.dex";

@@ -34,13 +34,77 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.0"
                     android:text="是否自动抢自己的发送的红包"
-                    android:textColor="#000000"
+                    android:textColor="#ff000000"
                     android:textSize="16sp" />
 
                 <CheckBox
                     android:id="@+id/grab_self_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <EditText
+                    android:id="@+id/edit_pay_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:hint="请配置支持密码"
+                    android:textColor="#ff000000"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/save_pay_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="保存" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <EditText
+                    android:id="@+id/grab_start"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:hint="开始时间"
+                    android:inputType="number"
+                    android:textColor="#ff000000"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/grab_end"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1.0"
+                    android:hint="结束时间"
+                    android:inputType="number"
+                    android:textColor="#ff000000"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/save_grab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="保存" />
             </LinearLayout>
 
 

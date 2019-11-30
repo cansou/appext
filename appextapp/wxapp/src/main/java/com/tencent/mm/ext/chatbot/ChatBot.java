@@ -1,12 +1,13 @@
 package com.tencent.mm.ext.chatbot;
 
+import android.app.ext.utils.Log;
 import android.app.ext.utils.UiUtils;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.agmbat.robot.RobotCenter;
 import com.tencent.mm.ext.luckymoney.send.LuckyMoneySender;
 import com.tencent.mm.ext.msg.MsgInfo;
+import com.tencent.mm.ext.settings.WXConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,11 +103,9 @@ public class ChatBot {
             setNeedAtMeAfter(FIVE_MINUTES);
         }
         String msg = removeRobotName(content);
-
-
-        Log.i(TAG, "receive content:" + msg);
+        Log.d(TAG, "receive content:" + msg);
         if (msg.equals("发红包")) {
-            if (TextUtils.isEmpty(LuckyMoneySender.getPayPassword())) {
+            if (TextUtils.isEmpty(WXConfig.get().getPayPassword())) {
                 return "需要配置支付密码!";
             }
             sendLuckMoney(msgInfo);
@@ -115,7 +114,7 @@ public class ChatBot {
             String password = msg.replace("发红包", "").trim();
             if (password.length() == 6) {
                 if (isNumber(password)) {
-                    LuckyMoneySender.setPayPassword(password);
+                    WXConfig.get().setPayPassword(password);
                     sendLuckMoney(msgInfo);
                     return "";
                 }
