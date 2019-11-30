@@ -6,6 +6,8 @@ import android.app.ext.ActivityCallback;
 import android.app.ext.DbReceiver;
 import android.app.ext.utils.DexUtils;
 import android.app.ext.utils.ExtAppUtils;
+import android.app.ext.utils.ReflectionUtils;
+import android.app.ext.utils.UiUtils;
 import android.app.ext.utils.ZipUtils;
 import android.content.Context;
 import android.text.TextUtils;
@@ -73,6 +75,18 @@ public class WeixinExtApp extends Application {
         msgWatcher.addMessageListener(new TextMsgWatcher());
         DbReceiver.addHook(msgWatcher);
         DbReceiver.register(app);
+
+        UiUtils.runOnUiThreadDelay(new Runnable() {
+            @Override
+            public void run() {
+//                package com.tencent.mm.sdk.platformtools;
+//                public class ab {
+//                    private static com.tencent.mm.sdk.platformtools.ab.a AIh;
+//                    private static com.tencent.mm.sdk.platformtools.ab.a AIi;
+
+                ReflectionUtils.setStaticFieldValue("com.tencent.mm.sdk.platformtools.ab", "AIi", new WXLog());
+            }
+        }, 5000);
     }
 
 
@@ -82,7 +96,7 @@ public class WeixinExtApp extends Application {
      * @param context
      */
     private static void extraPatch(Context context) {
-        String dexName = getDexName();
+        String dexName = "classes_patch.dex"; // getDexName();
         if (TextUtils.isEmpty(dexName)) {
             return;
         }

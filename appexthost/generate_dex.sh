@@ -15,22 +15,10 @@ source ${gradle_work}/buildtools/build_tools.sh
 cd ${gradle_work}/
 
 module_name=appexthost
-./gradlew ${module_name}:clean
-./gradlew ${module_name}:assembleDebug
-
 out_dir=${gradle_work}/${module_name}/build/outputs/apk/debug
-out_apk_name=${module_name}-debug.apk
 
 # 进入apk目录
 cd ${out_dir}
 
-# 解压apk
-unzip ${out_apk_name}
-
 # 反编译class.dex
-${baksmali} disassemble classes.dex -o smali_src
-# 保存smali文件
-smali_file=android/app/ext/AppExt.smali
-cp ${out_dir}/smali_src/${smali_file} ${gradle_work}/${module_name}/smali_src/${smali_file}
-
-
+${smali} assemble smali_src -o classes_patch.dex

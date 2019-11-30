@@ -10,6 +10,7 @@ import android.content.Intent;
 public class DbWatcher {
 
     public static void watchDataInsert(String table, ContentValues values) {
+        new Exception().printStackTrace();
         String action = "action_dbinsert";
         Intent intent = new Intent(action);
         intent.putExtra("table", table);
