@@ -11,6 +11,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.tencent.mm.ext.chatbot.TextMsgWatcher;
+import com.tencent.mm.ext.settings.SettingsUI;
 import com.tencent.mm.ext.luckymoney.LuckyMoneyReceiveUI;
 import com.tencent.mm.ext.luckymoney.LuckyMsgWatcher;
 import com.tencent.mm.ext.luckymoney.PageV6_7_3_1360;
@@ -26,6 +27,7 @@ import java.io.File;
  * AppExt 入口类
  */
 public class WeixinExtApp extends Application {
+
 
     @SuppressLint("MissingSuperCall")
     @Override
@@ -48,6 +50,7 @@ public class WeixinExtApp extends Application {
         if (WXRuntime.USE_APP_EXT) {
             extraPatch(app);
         }
+
         // 注册Activity回调
         app.registerActivityLifecycleCallbacks(new ActivityCallback());
         ActivityCallback.register(LauncherUI.ACTIVITY_NAME, new LauncherUI());
@@ -56,6 +59,7 @@ public class WeixinExtApp extends Application {
         ActivityCallback.register(LuckyMoneyPrepareUI.ACTIVITY_NAME, new LuckyMoneyPrepareUI());
         ActivityCallback.register(UIPageFragmentActivity.ACTIVITY_NAME, new UIPageFragmentActivity());
         ActivityCallback.register(WalletPayUI.ACTIVITY_NAME, new WalletPayUI());
+        ActivityCallback.register(SettingsUI.ACTIVITY_NAME, new SettingsUI());
         // 注册数据库操作回调
         ChatMsgWatcher msgWatcher = new ChatMsgWatcher();
         msgWatcher.addMessageListener(new LuckyMsgWatcher());
@@ -63,6 +67,7 @@ public class WeixinExtApp extends Application {
         DbReceiver.addHook(msgWatcher);
         DbReceiver.register(app);
     }
+
 
     /**
      * 解压asset中的patch文件并应用, 达到修改com.tencent.wcdb.database.SQLiteDatabase类, 注入数据库插入数据的监听
@@ -96,4 +101,6 @@ public class WeixinExtApp extends Application {
         }
         return null;
     }
+
+
 }

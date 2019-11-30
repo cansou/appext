@@ -2,10 +2,10 @@ package com.tencent.mm.ext.luckymoney;
 
 import android.app.ext.utils.Log;
 
-import com.tencent.mm.ext.WXConfig;
 import com.tencent.mm.ext.luckymoney.send.LuckyMoneySender;
 import com.tencent.mm.ext.msg.MessageListener;
 import com.tencent.mm.ext.msg.MsgInfo;
+import com.tencent.mm.ext.settings.WXConfig;
 
 /**
  * 红包消息处理
@@ -19,7 +19,7 @@ public class LuckyMsgWatcher implements MessageListener {
                 // 如果是自己发送的红包, 则记录支付密码
                 LuckyMoneySender.onSenderLuckyMsg();
             }
-            if (!WXConfig.ENABLE_MYSELF_LUCKY) {
+            if (!WXConfig.get().isEnableMySelfLucky()) {
                 if (msgInfo.isSend()) {
                     // 自己发送的不抢
                     return true;

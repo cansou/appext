@@ -5,16 +5,31 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.Process;
 
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.util.List;
 
 public class ExtAppUtils {
 
+    /**
+     * 准备ext apk
+     *
+     * @return
+     */
+    public static String getPluginApkPath(Context context) {
+        String apkName = getPluginApkName(context);
+        File cacheApk = new File(context.getFilesDir(), apkName);
+        return cacheApk.getAbsolutePath();
+    }
+
+    /**
+     * 获取ExtApp名称
+     *
+     * @param context
+     * @return
+     */
     public static String getPluginApkName(Context context) {
         // 加上md5作为校验,确保apk版本升级后ext不可用的问题
         String processName = getProcessName(context);

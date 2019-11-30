@@ -56,8 +56,8 @@ public abstract class AbsChatUIController implements IChatUIController {
             final EditText editText = findEditText();
             View.OnClickListener listener = ViewUtils.getViewOnClickListener(sendButton);
             mOnSendButtonClickListener = new OnSendButtonClickListener(listener, editText);
+            sendButton.setOnClickListener(mOnSendButtonClickListener);
         }
-        sendButton.setOnClickListener(mOnSendButtonClickListener);
         Debug.printStackTrace();
         findEditText().setText(msg);
         if (mOnSendButtonClickListener != null) {

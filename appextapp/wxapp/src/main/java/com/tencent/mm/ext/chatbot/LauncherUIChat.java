@@ -4,6 +4,9 @@ import android.app.Activity;
 
 import com.tencent.mm.ext.WXRuntime;
 
+/**
+ *
+ */
 public class LauncherUIChat {
 
     private static IChatUIController sIChatUIController;

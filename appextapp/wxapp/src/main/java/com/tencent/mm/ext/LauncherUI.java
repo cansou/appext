@@ -2,7 +2,6 @@ package com.tencent.mm.ext;
 
 import android.app.Activity;
 import android.app.ext.ActivityLifecycleHook;
-import android.app.ext.utils.UiUtils;
 import android.os.Bundle;
 
 import com.tencent.mm.ext.chatbot.LauncherUIChat;
