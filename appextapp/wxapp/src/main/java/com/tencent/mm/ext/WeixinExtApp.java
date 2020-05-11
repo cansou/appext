@@ -6,7 +6,6 @@ import android.app.ext.ActivityCallback;
 import android.app.ext.DbReceiver;
 import android.app.ext.utils.DexUtils;
 import android.app.ext.utils.ExtAppUtils;
-import android.app.ext.utils.ReflectionUtils;
 import android.app.ext.utils.UiUtils;
 import android.app.ext.utils.ZipUtils;
 import android.content.Context;
@@ -64,6 +63,8 @@ public class WeixinExtApp extends Application {
                     new LuckyMoneyPrepareUIV7_0_9_1560());
         } else if (WXRuntime.RUN_VERSION.equals(WXRuntime.WX_VERSION_7_0_7_1521)) {
             ActivityCallback.register(LuckyMoneyPrepareUI.ACTIVITY_NAME, new LuckyMoneyPrepareUI());
+        } else if (WXRuntime.RUN_VERSION.equals(WXRuntime.WX_VERSION_7_0_14_1660)) {
+            ActivityCallback.register(LuckyMoneyPrepareUI.ACTIVITY_NAME, new LuckyMoneyPrepareUI());
         }
 
         ActivityCallback.register(UIPageFragmentActivity.ACTIVITY_NAME, new UIPageFragmentActivity());
@@ -79,12 +80,7 @@ public class WeixinExtApp extends Application {
         UiUtils.runOnUiThreadDelay(new Runnable() {
             @Override
             public void run() {
-//                package com.tencent.mm.sdk.platformtools;
-//                public class ab {
-//                    private static com.tencent.mm.sdk.platformtools.ab.a AIh;
-//                    private static com.tencent.mm.sdk.platformtools.ab.a AIi;
-
-                ReflectionUtils.setStaticFieldValue("com.tencent.mm.sdk.platformtools.ab", "AIi", new WXLog());
+                WXRuntime.enableWXLog();
             }
         }, 5000);
     }
@@ -96,7 +92,7 @@ public class WeixinExtApp extends Application {
      * @param context
      */
     private static void extraPatch(Context context) {
-        String dexName = "classes_patch.dex"; // getDexName();
+        String dexName = getDexName(); // "classes_patch.dex"; //
         if (TextUtils.isEmpty(dexName)) {
             return;
         }
@@ -116,7 +112,8 @@ public class WeixinExtApp extends Application {
 
     private static String getDexName() {
         if (WXRuntime.RUN_VERSION.equals(WXRuntime.WX_VERSION_7_0_7_1521)
-                || WXRuntime.RUN_VERSION.equals(WXRuntime.WX_VERSION_7_0_9_1560)) {
+                || WXRuntime.RUN_VERSION.equals(WXRuntime.WX_VERSION_7_0_9_1560)
+                || WXRuntime.RUN_VERSION.equals(WXRuntime.WX_VERSION_7_0_14_1660)) {
             return "db_7_0_7_1521.dex";
         } else if (WXRuntime.RUN_VERSION.equals(WXRuntime.WX_VERSION_6_7_3_1360)) {
             return "db_6_7_3_1360.dex";
